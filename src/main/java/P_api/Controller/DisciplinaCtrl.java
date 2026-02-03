@@ -22,6 +22,7 @@ public class DisciplinaCtrl {
        return ResponseEntity.ok(disc);
    }
 
+
    @GetMapping("/search/{id}")
     public ResponseEntity<Disciplina> searchDisciplina(@PathVariable int id) {
         discService.getDisciplinaById(id);

@@ -91,17 +91,7 @@ public class MatriculaCtrl {
     }
 
 
-   /* @PutMapping("/relacoesMT")
-    //==============================
-    //Associa matricula a uma turma
-    //==============================
-    public ResponseEntity relacaoMatric_Turma(@RequestParam int id, @RequestBody Turma dto) {
-            matricService.relacionarMT(id, dto);
-            Matricula aluno = matricService.seachID(id).orElseThrow(() -> new RuntimeException("Matrícula não encontrada"));
-            ResponseEntity resposta = new ResponseEntity(aluno, HttpStatus.OK);
-            return resposta;
 
-    }*/
 
 
 

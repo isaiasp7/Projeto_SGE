@@ -29,7 +29,5 @@ public class AlunoDTO {
 
 
     }
-    /*public AlunoDTO converseAluno_DTO(Aluno aluno) {
-        return new AlunoDTO(aluno);
-    }*/
+
 }

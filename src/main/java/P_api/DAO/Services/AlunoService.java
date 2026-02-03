@@ -105,7 +105,7 @@ public class AlunoService {
     //======================DELETE===========================
 
 
-    public boolean deleteAluno(int matriculaId) {
+    public boolean deleteAlunoId(int matriculaId) {
         if(this.searchAlunoId(matriculaId) != null) {
             alunoRepository.deleteById(matriculaId);
             return true;
@@ -114,6 +114,15 @@ public class AlunoService {
         }
 
     }
+   /* public boolean deleteAlunoCpf(String alunoCpf) {
+        if(this.searchAluno(alunoCpf) != null) {
+            alunoRepository.deleteByCpf(alunoCpf);
+            return true;
+        }else{
+            return false;
+        }
+
+    }*/
 
     //====================== RELACIONAMENTO ===========================
 

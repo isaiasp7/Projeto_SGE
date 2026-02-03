@@ -51,16 +51,18 @@ public class AlunoCtrl {
 
 
     //================ DELETE ========================
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletarAluno(@PathVariable int id) {
+    @DeleteMapping("/delete/id/{id}")
+    public ResponseEntity<String> deletarAlunoId(@PathVariable int id) {
         Aluno temp_aluno =alunoS.searchAlunoId(id);
-        var Alunonome = temp_aluno.getNome();
-        Boolean delBoolean = alunoS.deleteAluno(id);
+        var AlunoNome = temp_aluno.getNome();
+        boolean delBoolean = alunoS.deleteAlunoId(id);
         if (delBoolean) {
-            return ResponseEntity.ok("Aluno "+Alunonome+" com id : "+id+" removido do sistema.");
+            //return ResponseEntity.ok("Aluno "+AlunoNome+" com id : "+id+" removido do sistema.");
+            return ResponseEntity.ok("ok");
         }
         return ResponseEntity.ok("O id inserido não existe");
     }
+
 
 
     //=============== UPDATE ===========================
