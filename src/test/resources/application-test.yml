@@ -1,0 +1,19 @@
+spring:
+application:
+name: Produtos API
+
+datasource:
+url: jdbc:h2:mem:produtosApi
+username: sa
+password: pass
+
+jpa:
+database-platform: org.hibernate.dialect.H2Dialect
+hibernate:
+ddl-auto: create-drop
+show-sql: true
+
+h2:
+console:
+enabled: true
+path: /meu-banco-h2

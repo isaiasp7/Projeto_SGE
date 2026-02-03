@@ -48,17 +48,9 @@ public class Disciplina {
 
 
 //==============================================================
-public Disciplina(){}
-
-    /*public Disciplina() {
+    public Disciplina() {
         this.id= Utilities.gerar_id("disciplina");
-    }*/
-
-    /*public Disciplina(Disciplina disciplina) {
-        this.nome = disciplina.getNome();
-        this.carga_horaria = disciplina.getCarga_horaria();
-        this.id= Utilities.gerar_id("disciplina");
-    }*/
+    }
 
     public Disciplina(String nome, int carga_h) {
         this.nome = nome;
@@ -71,43 +63,9 @@ public Disciplina(){}
     this.nome = disciplina.nome;
     this.cargaHoraria = disciplina.cargaHoraria;
     this.id = Utilities.gerar_id("disciplina");
-    this.professor = disciplina.professor;
-    this.turma = disciplina.turma;
-    this.notas = disciplina.notas;
+    this.professor = disciplina.professor==null?disciplina.professor:null;
+    this.turma = disciplina.turma==null?disciplina.turma:null;
+    this.notas = disciplina.notas==null?null:disciplina.notas;
     }
 
-
-
-
-   public List<Object> getTurma() {
-            if (turma != null) {
-                List<Object> lista = new ArrayList<>();
-                lista.add(turma.getId());
-                lista.add(turma.getNome());
-                return  lista;
-            }else{
-                return null;
-            }
-
-    }
-
-    public void setTurma(Turma turma) {
-        this.turma = turma;
-    }
-    public List<Object> getProfessor() {
-        if (professor != null) {
-            List<Object> lista = new ArrayList<>();
-            lista.add(professor.getId());
-            lista.add(professor.getNome());
-            return lista;
-        }
-        return null;
-    }
-
-    public void setCargaHoraria(Integer cargaHoraria) {
-        if(cargaHoraria!=null){
-            this.cargaHoraria = cargaHoraria;
-        }
-
-    }
 }
