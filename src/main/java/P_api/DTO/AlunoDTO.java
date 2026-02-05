@@ -10,10 +10,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class AlunoDTO {
-    private String cpf;
-    private String email;
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date dataNasci;
     private Integer Quant_faltas = 0;
 
 
@@ -21,13 +17,14 @@ public class AlunoDTO {
 
     }
 
+
     public AlunoDTO(Aluno aluno) {
-        this.cpf = aluno.getCpf();
-        this.email = aluno.getEmail();
-        this.dataNasci = aluno.getDataNasci();
         this.Quant_faltas = aluno.getQuant_faltas();
 
 
     }
 
+    public AlunoDTO(Integer quant_faltas) {
+        Quant_faltas = quant_faltas;
+    }
 }

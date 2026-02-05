@@ -14,4 +14,5 @@ public interface AlunosRepository extends JpaRepository<Aluno, Integer> {
 
     Optional<Aluno> findByCpf(String cpf);
 
+    void deleteByCpf(String alunoCpf);
 }

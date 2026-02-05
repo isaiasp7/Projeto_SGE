@@ -1,19 +1,38 @@
+# ===============================
+# PROFILE DE TESTE
+# ===============================
 spring:
-application:
-name: Produtos API
+  application:
+    name: Produtos API - TEST
 
-datasource:
-url: jdbc:h2:mem:produtosApi
-username: sa
-password: pass
+  # ===============================
+  # DATASOURCE - H2 (EM MEMÓRIA)
+  # ===============================
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
 
-jpa:
-database-platform: org.hibernate.dialect.H2Dialect
-hibernate:
-ddl-auto: create-drop
-show-sql: true
+  # ===============================
+  # JPA / HIBERNATE
+  # ===============================
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      # Em testes, o schema é recriado a cada execução
+      ddl-auto: create-drop
 
-h2:
-console:
-enabled: true
-path: /meu-banco-h2
+    # Exibe SQL gerado pelo Hibernate (útil para depuração)
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+  # ===============================
+  # H2 CONSOLE (OPCIONAL)
+  # ===============================
+  h2:
+    console:
+      enabled: false

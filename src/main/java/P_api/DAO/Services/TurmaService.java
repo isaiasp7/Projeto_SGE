@@ -36,12 +36,11 @@ public class TurmaService {
 
     public Turma createTurma(Turma turma) {
 
-        Turma newTurma = new Turma(turma);
         System.out.println("=======================");
         System.out.println(turma.getNome());
         System.out.println(turma.getCapacidadeMax());
         System.out.println("=======================");
-        return turmasRepository.save(newTurma);
+        return turmasRepository.save(turma);
 
     }
 

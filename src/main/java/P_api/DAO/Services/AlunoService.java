@@ -2,8 +2,10 @@ package P_api.DAO.Services;
 
 
 import P_api.DAO.ClassRepository.AlunosRepository;
+import P_api.DTO.AlunoDTO;
 import P_api.Model.Aluno;
 import P_api.Model.Matricula;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +38,7 @@ public class AlunoService {
 
     }
 
-    public Aluno searchAlunoId(int matriculaId) {
+    public Aluno searchAlunoId(long matriculaId) {
         Matricula matricula = matricService.seachID(matriculaId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada"));
 
@@ -54,7 +56,6 @@ public class AlunoService {
     }
 
     //=====================UPDATE============================
-
     public void saveAlunos(Aluno aluno) {
         alunoRepository.save(aluno);
     }
@@ -81,15 +82,11 @@ public class AlunoService {
     }
 
 
-    public Aluno updateAlunos(String cpf, Aluno alunoAtualizado) {
+    public Aluno updateAlunos(String cpf, AlunoDTO alunoAtualizado) {
         Aluno alunoExistente = this.searchAluno(cpf);
 
         try {
 
-            // Não faz sentido aluno atualizar campos de cadastro
-            if (alunoAtualizado.getEmail() != null) {
-                alunoExistente.setEmail(alunoAtualizado.getEmail());
-            }
             if(alunoAtualizado.getQuant_faltas()!=null) {
                 alunoExistente.setQuant_faltas(alunoAtualizado.getQuant_faltas());
             }
@@ -114,15 +111,20 @@ public class AlunoService {
         }
 
     }
-   /* public boolean deleteAlunoCpf(String alunoCpf) {
-        if(this.searchAluno(alunoCpf) != null) {
-            alunoRepository.deleteByCpf(alunoCpf);
-            return true;
-        }else{
-            return false;
+    @Transactional
+   public boolean deleteAlunoCpf(String alunoCpf) {
+        try {
+            if(this.searchAluno(alunoCpf) != null) {
+                alunoRepository.deleteByCpf(alunoCpf);
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
-    }*/
+    }
 
     //====================== RELACIONAMENTO ===========================
 
