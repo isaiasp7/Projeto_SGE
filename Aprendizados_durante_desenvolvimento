@@ -1,0 +1,21 @@
+ 1 – **Conflito de configuração entre bancos de produção e teste no Spring Boot**
+Ao manter dois bancos de dados distintos — um para o ambiente de execução do sistema (ex.: MySQL) e outro exclusivo para testes (ex.: H2) — é fundamental isolar corretamente os profiles e as propriedades do Spring. Caso contrário, o Spring Boot pode inicializar parcialmente o contexto da aplicação principal antes do contexto de testes.
+O problema observado ocorreu porque a propriedade spring.jpa.hibernate.ddl-auto=update estava habilitada. Esse modo não recria o schema, apenas tenta sincronizá-lo, preservando dados existentes. Com isso, ao iniciar os testes, o Hibernate reutilizava metadados e estruturas previamente persistidas, fazendo com que o banco H2 herdasse dados e estruturas do banco principal.
+Em termos arquiteturais, houve vazamento de estado entre contextos de persistência, causado pela ausência de isolamento adequado de configuração. O resultado foi a falsa impressão de que o banco de testes estava “buscando” dados do banco principal, quando na verdade o Hibernate apenas não descartava o estado anterior por estar em modo update.
+
+2 – **Quebra de identidade de entidade ao tentar atualizar chave primária no JPA/Hibernate**
+    No cenário analisado, o CPF foi modelado como chave primária (@Id) da entidade Aluno. Em termos de banco de dados
+    relacional, o MySQL permite a atualização de uma chave primária desde que não haja violação de integridade
+   referencial. Contudo, no contexto de um ORM como o JPA/Hibernate, a chave primária possui um papel adicional: ela define a identidade imutável da entidade dentro do contexto de persistência.
+    O problema observado surgiu quando, durante um teste, foi realizada a atualização do CPF de um aluno e, em seguida,
+    uma consulta foi executada utilizando o CPF antigo. Esperava-se que a busca retornasse null, indicando que o valor
+   antigo não existia mais. No entanto, o JPA retornava a entidade, mesmo após o update ter sido visualmente confirmado no banco de dados.
+    Arquiteturalmente, isso ocorre porque o Hibernate mantém um Persistence Context (cache de primeiro nível), no qual cada entidade é indexada pela sua chave primária no momento em que é carregada. Ao modificar o valor do campo anotado com @Id, cria-se uma inconsistência lógica: o objeto Java passa a conter um novo CPF, mas o contexto de persistência continua associando aquele objeto à chave primária original.
+    Como consequência, consultas subsequentes por findById(cpfAntigo) não acessam o banco de dados, sendo resolvidas diretamente pelo cache, retornando uma entidade que, do ponto de vista do banco, já não deveria existir.
+    Em termos conceituais, houve uma violação do contrato de identidade do JPA. O ORM assume que a identidade de uma entidade não muda durante seu ciclo de vida. Quando essa premissa é quebrada, o framework entra em um estado inconsistente, no qual o banco reflete uma realidade e o contexto de persistência reflete outra.
+
+3 - Vazamento de responsabilidade entre Service e Controller
+
+    O problema ocorre quando um método da camada de service retorna um Optional como parte do seu contrato público. Embora o uso de Optional seja adequado na camada de repository, onde há incerteza natural na recuperação de dados, sua exposição pelo service transfere indevidamente para o controller a responsabilidade de decidir o que fazer quando a entidade não existe.
+    Arquiteturalmente, essa decisão deveria ser tomada pelo service, pois a existência da entidade é uma regra de negócio, não uma preocupação de apresentação. Ao retornar Optional, o service enfraquece seu contrato, obriga o controller a implementar lógica de domínio e gera inconsistência, já que diferentes controllers podem tratar a ausência de dados de formas distintas.
+    A abordagem correta é consumir o Optional dentro do service e lançar uma exceção de domínio quando a entidade não for encontrada. Assim, o service preserva sua responsabilidade sobre as regras do domínio, enquanto o controller permanece focado exclusivamente na tradução dessas exceções em respostas HTTP, mantendo a separação de responsabilidades e a coerência arquitetural do sistema.

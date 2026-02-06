@@ -3,17 +3,16 @@ package P_api.DAO.Services;
 
 import P_api.DAO.ClassRepository.AlunosRepository;
 import P_api.DTO.AlunoDTO;
+import P_api.Exceptions.Erros.AlunoNaoEncontrado;
 import P_api.Model.Aluno;
 import P_api.Model.Matricula;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
+
 @Slf4j
 @Service
 public class AlunoService {
@@ -22,28 +21,29 @@ public class AlunoService {
     @Autowired
     private MatricService matricService;//Alguns elementos de aluno estao em matricula = id,turma, notas...
 
-    public List<Aluno> getAlunos() {
+    public List<Aluno> getAlunos() {//se não houver ninguem retora uma lista vazia
         return alunoRepository.findAll();
     }
+
     //====================================
 
     public Aluno searchAluno(String cpf) {
-        Optional<Aluno> aluno = alunoRepository.findByCpf(cpf);
-        if (aluno.isPresent()) {
-            return aluno.get();
-        }
-        else{
-            return aluno.orElse(null);
-        }
-
+        return alunoRepository.findByCpf(cpf)
+                .orElseThrow(() ->
+                        new AlunoNaoEncontrado("Aluno não encontrado para CPF: " + cpf)
+                );
     }
+
 
     public Aluno searchAlunoId(long matriculaId) {
-        Matricula matricula = matricService.seachID(matriculaId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada"));
+        Matricula matricula =
+                matricService.seachID(matriculaId)
+                        .orElseThrow(() -> new AlunoNaoEncontrado("Aluno não encontrado"));
 
-        return matricula.getAluno_cpf(); // Retorna o aluno relacionado à matrícula
+        return matricula.getAluno_cpf();
+
     }
+
 
 
 
@@ -61,13 +61,14 @@ public class AlunoService {
     }
 
 
-    public Aluno updateAlunosId(int id, String email) {
+    public Aluno updateAlunoEmail(long id, String email) {
         Aluno alunoExistente = this.searchAlunoId(id);
 
         try {
 
             // Não faz sentido aluno atualizar campos de cadastro
             if (email != null) {
+
                 alunoExistente.setEmail(email);
             }else{
                 throw new RuntimeException("Email não foi passado");

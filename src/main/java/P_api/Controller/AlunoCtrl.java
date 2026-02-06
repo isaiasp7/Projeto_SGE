@@ -3,12 +3,12 @@ package P_api.Controller;
 import P_api.DAO.Services.AlunoService;
 import P_api.DTO.AlunoDTO;
 import P_api.Model.Aluno;
-import P_api.Model.Matricula;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
+
 import java.util.List;
 
 @RestController
@@ -23,20 +23,18 @@ public class AlunoCtrl {
     @GetMapping("/getAll")
     @Operation(description = "Retorna uma lista com todos os alunos cadastrados.")
     public ResponseEntity<List<Aluno>> mostrarAlunos() {
-        var alunos = alunoS.getAlunos();
-        return ResponseEntity.ok(alunos);
+        return ResponseEntity.ok(alunoS.getAlunos());
     }
 
     @GetMapping("/searchCpf/{cpf}")
     @Operation(description = "Busca alunos pelo CPF (suporta busca parcial).")
-    public ResponseEntity SearchCpf(@PathVariable String cpf) {
-        var lista = alunoS.searchAluno(cpf);
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<Aluno> searchCpf(@PathVariable String cpf) {
+        return ResponseEntity.ok(alunoS.searchAluno(cpf));
     }
 
     @GetMapping("/searchID/{id}")
     @Operation(description = "Busca um aluno específico pelo seu ID único.")
-    public ResponseEntity SearchId(@PathVariable int id) {
+    public ResponseEntity<Aluno> SearchId(@PathVariable int id) {
         return ResponseEntity.ok(alunoS.searchAlunoId(id));
     }
 
@@ -45,7 +43,6 @@ public class AlunoCtrl {
     @PostMapping("create")
     @Operation(description = "Cadastra um novo aluno no sistema. Requer CPF, nome e data de nascimento.")
     public ResponseEntity<Aluno> cadastrarAluno(@RequestBody Aluno aluno) {
-        aluno.setMatriculas(new Matricula());
         Aluno novoAl = alunoS.addAlunos(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAl);
     }
@@ -55,8 +52,6 @@ public class AlunoCtrl {
     @DeleteMapping("/delete/id/{id}")
     @Operation(description = "Remove um aluno do sistema usando seu ID como referência.")
     public ResponseEntity<String> deletarAlunoId(@PathVariable int id) {
-        Aluno temp_aluno = alunoS.searchAlunoId(id);
-        var AlunoNome = temp_aluno.getNome();
         boolean delBoolean = alunoS.deleteAlunoId(id);
         if (delBoolean) {
             return ResponseEntity.ok("ok");
@@ -69,13 +64,13 @@ public class AlunoCtrl {
     @PutMapping("/updateAlunosId/{id}")
     @Operation(description = "Atualiza o email de um aluno específico usando seu ID.")
     public ResponseEntity<Aluno> atualizarAluno(@PathVariable int id, @RequestBody String email) {
-        Aluno alunoAtualizado = alunoS.updateAlunosId(id, email);
+        Aluno alunoAtualizado = alunoS.updateAlunoEmail(id, email);
         return ResponseEntity.ok(alunoAtualizado);
     }
 
     @PutMapping("/updateAlunos/{cpf}")
     @Operation(description = "Atualiza múltiplos dados de um aluno usando seu CPF como referência.")
-    public ResponseEntity atualizarAluno(@PathVariable String cpf, @RequestBody AlunoDTO aluno) {
+    public ResponseEntity<Aluno> atualizarAluno(@PathVariable String cpf, @RequestBody AlunoDTO aluno) {
         Aluno alunoAtualizado = alunoS.updateAlunos(cpf, aluno);
         return ResponseEntity.ok(alunoAtualizado);
     }

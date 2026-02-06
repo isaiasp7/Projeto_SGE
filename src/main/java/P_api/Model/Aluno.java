@@ -67,11 +67,11 @@ public class Aluno {
     }
 
 
-    public Object getMatriculas() {
-        if (matriculas != null) {
-            return matriculas.getId();
+    public Matricula getMatriculas() {
+        if (this.matriculas != null) {
+            return matriculas;
         } else {
-            return "Aluno ainda não associado a uma turma";
+            return null;
         }
 
     }

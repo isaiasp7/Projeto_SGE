@@ -2,6 +2,7 @@ package P_api.DAO.Services;
 
 import P_api.DTO.AlunoDTO;
 import P_api.DTO.MatriculaDTO;
+import P_api.Exceptions.Erros.AlunoNaoEncontrado;
 import P_api.Model.Aluno;
 import P_api.Model.Matricula;
 import P_api.Model.Turma;
@@ -25,7 +26,7 @@ class AlunoServiceTest {
     private AlunoService alunoService;
     private Aluno aluno;
     @Autowired
-    private TurmaService turmaService = new TurmaService();
+    private TurmaService turmaService;
     @Autowired
     private MatricService matricService;
 
@@ -110,12 +111,37 @@ class AlunoServiceTest {
         assertEquals(5,alunoService.searchAluno("02543987452").getQuant_faltas());//verifica se o antigo aluno agora
         // possui quantidade de faltas = 5
     }
-    //
-    @Test
-    public void deve_retornar_falha_getAlunos() {
-        Exception exception ()
+    //=======================================================================================
 
+    @Test
+    public void Empty_getAlunos() {//lista vazia
+        assertEquals(0,alunoService.getAlunos().size());
 
     }
+    @Test
+    public void exeception_searchCPF() {//lista vazia retornar um AlunoNaoEncontrado
+        assertThrows(
+                AlunoNaoEncontrado.class,
+                () -> alunoService.searchAluno("02543987452")
+        );
+
+    }
+    @Test
+    public void exeception_searchID() {//
+        assertThrows(
+                AlunoNaoEncontrado.class,
+                () -> alunoService.searchAlunoId(12315)
+        );
+
+    }
+    /*@Test
+    public void exeception_updateAlunoEmail(){//E NECESSÁRIO VALIDA EMAIL
+        aluno.setMatriculas(new Matricula());
+        alunoService.saveAlunos(aluno);
+        assertThrows(RuntimeException.class,
+                ()-> alunoService.updateAlunosId(aluno.getMatriculas().getId(),"")
+        );
+    }*/
+
 
 }
