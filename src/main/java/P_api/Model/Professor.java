@@ -46,8 +46,14 @@ public class Professor {
         this.email = Utilities.gerar_email(this.getNome());
         this.disciplina_fk = disciplina_fk;
         this.id=(int)Utilities.gerar_id("professor");
-
         this.telefone = telefone;
+    }
+    public Professor( String nome, String telefone) {
+        this.nome = nome;
+        this.id=(int)Utilities.gerar_id("professor");
+        this.email = Utilities.gerar_email(this.getNome());
+        this.telefone = telefone;
+
     }
 
 

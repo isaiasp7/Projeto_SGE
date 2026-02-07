@@ -3,9 +3,12 @@ package P_api.DAO.Services;
 import P_api.DAO.ClassRepository.DisciplinasRepository;
 import P_api.DAO.ClassRepository.ProfessoresRepository;
 import P_api.DTO.ProfDiscDTO;
+import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
+import P_api.Exceptions.Erros.FalhaRelacionamento;
 import P_api.Factory.ClassFactory;
 import P_api.Model.Disciplina;
 import P_api.Model.Professor;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,16 +32,16 @@ public class ProfService {
     private DisciplinasRepository disciplinasRepository;
 
     public Professor newProfessor(Professor professor) { //testar add prof já com uma disciplina
-        Professor newP = new Professor(professor);
 
-        if (profRepository.existsById(newP.getId())) {
+
+        if (profRepository.existsById(professor.getId())) {
             //notificar que ja existia
             return profRepository.findById(professor.getId()).get();
         } else {
 
-            profRepository.save(newP);//saveAndFlush funciona como o save, mas age de maneira imediata
+            profRepository.save(professor);//saveAndFlush funciona como o save, mas age de maneira imediata
         }
-        return newP;
+        return professor;
     }
     public List<ProfDiscDTO> getAllProfessores() {
         return profRepository.findAll() // Busca todos os professores do repositório
@@ -76,16 +79,18 @@ public class ProfService {
             return prof;
 
         } else {
-            return null;
+            throw new FalhaRelacionamento("Erro no relacionamento entre Professor e Disciplina");
 
         }
     }
 
-    public String removeProfessor(long id) {
+    public void removeProfessor(long id) {
+        if (!profRepository.existsById(id)) {
+            throw new EntidadeNaoEncontrada("Professor não encontrado");
+        }
         profRepository.deleteById(id);
-        return "Professor removido com sucesso!";
-
     }
+
     //CORRIGIR O RETORNO
     public Professor updateProfessor(long id, Professor alterProfessor) {
         Professor prof = profRepository.findById(id).get();
@@ -94,10 +99,11 @@ public class ProfService {
                 String key = camposAlter.getKey();
                 Object val = camposAlter.getValue();
                 Field field = Professor.class.getDeclaredField(key);//pega o atributo
-                field.setAccessible(true);//isso é usado para dizer que mesmo o atributo sendo priva
+                field.setAccessible(true);//isso é usado para dizer que mesmo o atributo sendo privado permito que o
+                // leia
                 if (key.equals("id")) {
                     continue;
-                } else if (key.equals("discplina_fk")) {//tratar inexistencia de disciplina
+                } else if (key.equals("disciplina_fk")) {//tratar inexistencia de disciplina
                     prof.setDisciplina_fk((Disciplina) val);
                 }
                 field.set(prof, val);

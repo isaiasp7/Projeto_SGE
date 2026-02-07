@@ -54,14 +54,6 @@ public class ClassFactory {
         return dto;
     }
 
-    public AlunoDTO converseAluno_DTO(Aluno aluno) {
-        return new AlunoDTO(aluno);
-    }
-
-    public MatriculaDTO converterParaDTO(Matricula matricula) {
-        return new MatriculaDTO(matricula);
-
-    }
 
 
 }

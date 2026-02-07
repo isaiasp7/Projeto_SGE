@@ -3,7 +3,7 @@ package P_api.DAO.Services;
 
 import P_api.DAO.ClassRepository.AlunosRepository;
 import P_api.DTO.AlunoDTO;
-import P_api.Exceptions.Erros.AlunoNaoEncontrado;
+import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Model.Aluno;
 import P_api.Model.Matricula;
 import jakarta.transaction.Transactional;
@@ -30,7 +30,7 @@ public class AlunoService {
     public Aluno searchAluno(String cpf) {
         return alunoRepository.findByCpf(cpf)
                 .orElseThrow(() ->
-                        new AlunoNaoEncontrado("Aluno não encontrado para CPF: " + cpf)
+                        new EntidadeNaoEncontrada("Aluno não encontrado para CPF: " + cpf)
                 );
     }
 
@@ -38,7 +38,7 @@ public class AlunoService {
     public Aluno searchAlunoId(long matriculaId) {
         Matricula matricula =
                 matricService.seachID(matriculaId)
-                        .orElseThrow(() -> new AlunoNaoEncontrado("Aluno não encontrado"));
+                        .orElseThrow(() -> new EntidadeNaoEncontrada("Aluno não encontrado"));
 
         return matricula.getAluno_cpf();
 
@@ -103,7 +103,7 @@ public class AlunoService {
     //======================DELETE===========================
 
 
-    public boolean deleteAlunoId(int matriculaId) {
+    public boolean deleteAlunoId(int matriculaId) {//melhorar esse retorno
         if(this.searchAlunoId(matriculaId) != null) {
             alunoRepository.deleteById(matriculaId);
             return true;

@@ -1,11 +1,13 @@
 package Util;
 
+import P_api.Exceptions.Erros.CampoVazio;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utilities {
-        public static String gerar_email(String nome){//não ta chegando nada
+        public static String gerar_email(String nome){//DEPOIS FAZER UMA CLASSIFICACAO PARA ALUNO E PROFESSOR
                 String[] lista_name = nome.split(" ");
                 String email = "";
                 try {
@@ -17,11 +19,10 @@ public class Utilities {
                                 email = lista_name[0];
                         }
                 } catch (Exception e) {
-                        System.out.println("====================================");
-                        System.out.println("Deu ruim " + e);
+                       throw new CampoVazio("Campos vazios");
                 }
 
-                email =email.concat("@Instituto_ensino.gov.br");
+                email =email.concat("@instituto_ensino.gov.br");
 
                 return email;
 

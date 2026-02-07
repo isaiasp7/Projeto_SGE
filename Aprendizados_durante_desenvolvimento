@@ -14,8 +14,16 @@ Em termos arquiteturais, houve vazamento de estado entre contextos de persistên
     Como consequência, consultas subsequentes por findById(cpfAntigo) não acessam o banco de dados, sendo resolvidas diretamente pelo cache, retornando uma entidade que, do ponto de vista do banco, já não deveria existir.
     Em termos conceituais, houve uma violação do contrato de identidade do JPA. O ORM assume que a identidade de uma entidade não muda durante seu ciclo de vida. Quando essa premissa é quebrada, o framework entra em um estado inconsistente, no qual o banco reflete uma realidade e o contexto de persistência reflete outra.
 
-3 - Vazamento de responsabilidade entre Service e Controller
+3 - **Vazamento de responsabilidade entre Service e Controller**
 
     O problema ocorre quando um método da camada de service retorna um Optional como parte do seu contrato público. Embora o uso de Optional seja adequado na camada de repository, onde há incerteza natural na recuperação de dados, sua exposição pelo service transfere indevidamente para o controller a responsabilidade de decidir o que fazer quando a entidade não existe.
     Arquiteturalmente, essa decisão deveria ser tomada pelo service, pois a existência da entidade é uma regra de negócio, não uma preocupação de apresentação. Ao retornar Optional, o service enfraquece seu contrato, obriga o controller a implementar lógica de domínio e gera inconsistência, já que diferentes controllers podem tratar a ausência de dados de formas distintas.
     A abordagem correta é consumir o Optional dentro do service e lançar uma exceção de domínio quando a entidade não for encontrada. Assim, o service preserva sua responsabilidade sobre as regras do domínio, enquanto o controller permanece focado exclusivamente na tradução dessas exceções em respostas HTTP, mantendo a separação de responsabilidades e a coerência arquitetural do sistema.
+
+
+4 - **Confusão entre identidade Java, estado persistido e ciclo de vida das entidades no JPA**
+
+    Durante o desenvolvimento dos testes, surgiu um problema ao utilizar `assertEquals` para comparar objetos retornados pelo banco de dados. A expectativa inicial era de que, por representarem o mesmo registro persistido, os objetos seriam considerados iguais. No entanto, isso revelou uma **mistura de conceitos fundamentais** que levou à falha dos testes.
+    O equívoco principal foi tratar o banco de dados como se ele armazenasse **instâncias Java**, quando na realidade ele armazena apenas **linhas de dados**. A cada consulta, o Hibernate cria uma **nova instância da entidade**, popula seus atributos com os valores persistidos e retorna **outro objeto Java**, mesmo que o conteúdo seja idêntico. Como a identidade Java não atravessa transações, objetos recuperados em momentos diferentes pertencem a contextos distintos e não compartilham referência em memória.
+    A confusão ocorreu pela sobreposição entre identidade de objeto, identidade de banco e ciclo de vida das entidades no JPA. O `assertEquals`, por depender do método `equals`, acabou comparando referências em vez de identidade lógica, evidenciando que igualdade de estado não implica igualdade de instância. O problema não estava no banco nem no Hibernate, mas na interpretação incorreta de como esses níveis se relacionam arquiteturalmente.
+

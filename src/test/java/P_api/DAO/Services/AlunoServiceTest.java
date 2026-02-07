@@ -2,9 +2,8 @@ package P_api.DAO.Services;
 
 import P_api.DTO.AlunoDTO;
 import P_api.DTO.MatriculaDTO;
-import P_api.Exceptions.Erros.AlunoNaoEncontrado;
+import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Model.Aluno;
-import P_api.Model.Matricula;
 import P_api.Model.Turma;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,8 +72,10 @@ class AlunoServiceTest {
 
 
     }
+
     @Test
-    public void deve_retornar_alunos() {//retorna todos os alunos
+    void deve_retornar_alunos() {
+
         Aluno aluno2 = new Aluno("07866987452","jorge paulo",Date.from(
                 LocalDate.of(2015, 5, 12)
                         .atStartOfDay(ZoneId.systemDefault())
@@ -87,13 +91,28 @@ class AlunoServiceTest {
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant()
         ));
-        Aluno[] teste = {aluno,aluno2,aluno3,aluno4};
-        Arrays.stream(teste).forEach(alunoService::saveAlunos);
-        int quantidade = alunoService.getAlunos().size();
-        System.out.println("qunatidade de alunos: " + quantidade);
-        assertEquals(4, quantidade);
 
-    }
+            Aluno[] esperados = {aluno, aluno2, aluno3, aluno4};
+
+            Arrays.stream(esperados).forEach(alunoService::saveAlunos);
+
+            List<Aluno> alunosBanco = alunoService.getAlunos();
+
+            assertEquals(4, alunosBanco.size());
+
+            Set<String> cpfsEsperados = Arrays.stream(esperados)
+                    .map(Aluno::getCpf)
+                    .collect(Collectors.toSet());
+
+            Set<String> cpfsBanco = alunosBanco.stream()
+                    .map(Aluno::getCpf)
+                    .collect(Collectors.toSet());
+
+            assertEquals(cpfsEsperados, cpfsBanco);
+        }
+
+
+
     @Test
     public void deve_deletar_aluno() {//
         this.alunoService.saveAlunos(aluno);
@@ -111,7 +130,8 @@ class AlunoServiceTest {
         assertEquals(5,alunoService.searchAluno("02543987452").getQuant_faltas());//verifica se o antigo aluno agora
         // possui quantidade de faltas = 5
     }
-    //=======================================================================================
+
+    //======================================= ERROS / EXECEPTION ================================================
 
     @Test
     public void Empty_getAlunos() {//lista vazia
@@ -121,7 +141,7 @@ class AlunoServiceTest {
     @Test
     public void exeception_searchCPF() {//lista vazia retornar um AlunoNaoEncontrado
         assertThrows(
-                AlunoNaoEncontrado.class,
+                EntidadeNaoEncontrada.class,
                 () -> alunoService.searchAluno("02543987452")
         );
 
@@ -129,7 +149,7 @@ class AlunoServiceTest {
     @Test
     public void exeception_searchID() {//
         assertThrows(
-                AlunoNaoEncontrado.class,
+                EntidadeNaoEncontrada.class,
                 () -> alunoService.searchAlunoId(12315)
         );
 

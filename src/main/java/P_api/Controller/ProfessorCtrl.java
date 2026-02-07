@@ -59,12 +59,10 @@ public class ProfessorCtrl {
     //============= DELETE =================================
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteProfessor(@PathVariable long id) {
-        try {
-            return ResponseEntity.ok(profService.removeProfessor(id));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao deletar professor: " + e.getMessage());
-        }
+    public ResponseEntity<Boolean> deleteProfessor(@PathVariable long id) {
+        profService.removeProfessor(id);
+        return ResponseEntity.ok(true);
+
 
     }
     //============= RELACIONAMENTO ========================
