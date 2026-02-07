@@ -61,7 +61,7 @@ public class AlunoService {
     }
 
 
-    public Aluno updateAlunoEmail(long id, String email) {
+    public Aluno updateAlunoEmail(long id, String email) {//REVER - FAZ SENTIDO MUDAR O EMAIL? (REGRA DE NEGOCIO)
         Aluno alunoExistente = this.searchAlunoId(id);
 
         try {
