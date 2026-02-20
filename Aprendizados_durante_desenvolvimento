@@ -27,3 +27,7 @@ Em termos arquiteturais, houve vazamento de estado entre contextos de persistên
     O equívoco principal foi tratar o banco de dados como se ele armazenasse **instâncias Java**, quando na realidade ele armazena apenas **linhas de dados**. A cada consulta, o Hibernate cria uma **nova instância da entidade**, popula seus atributos com os valores persistidos e retorna **outro objeto Java**, mesmo que o conteúdo seja idêntico. Como a identidade Java não atravessa transações, objetos recuperados em momentos diferentes pertencem a contextos distintos e não compartilham referência em memória.
     A confusão ocorreu pela sobreposição entre identidade de objeto, identidade de banco e ciclo de vida das entidades no JPA. O `assertEquals`, por depender do método `equals`, acabou comparando referências em vez de identidade lógica, evidenciando que igualdade de estado não implica igualdade de instância. O problema não estava no banco nem no Hibernate, mas na interpretação incorreta de como esses níveis se relacionam arquiteturalmente.
 
+5 - Fazer depois    Corrigir:
+    1 - A quantidade de faltas em uma relação entre alunos - materia, mas ele pode ter uma visão geral
+    2 - A entidade aluno precisa conter uma coluna de ano referente, para que se saiba em que ano letivo o estudante se
+    encontra

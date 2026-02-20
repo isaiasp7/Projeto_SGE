@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 @RestController
-@RequestMapping("/alunoCrud")
+@RequestMapping("SGE/alunoCrud")
 //RODANDO
 public class AlunoCtrl {
     @Autowired
@@ -20,27 +20,24 @@ public class AlunoCtrl {
 
     //============== READ =====================
 
-    @GetMapping("/getAll")
-    @Operation(description = "Retorna uma lista com todos os alunos cadastrados.")
-    public ResponseEntity<List<Aluno>> mostrarAlunos() {
+    @GetMapping
+    public ResponseEntity<?> search(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String cpf) {
+
+        if (id != null) {
+            return ResponseEntity.ok(alunoS.searchAlunoId(id));
+        }
+
+        if (cpf != null && !cpf.isBlank()) {
+            return ResponseEntity.ok(alunoS.searchAluno(cpf));
+        }
+
         return ResponseEntity.ok(alunoS.getAlunos());
     }
-
-    @GetMapping("/searchCpf/{cpf}")
-    @Operation(description = "Busca alunos pelo CPF (suporta busca parcial).")
-    public ResponseEntity<Aluno> searchCpf(@PathVariable String cpf) {
-        return ResponseEntity.ok(alunoS.searchAluno(cpf));
-    }
-
-    @GetMapping("/searchID/{id}")
-    @Operation(description = "Busca um aluno específico pelo seu ID único.")
-    public ResponseEntity<Aluno> SearchId(@PathVariable int id) {
-        return ResponseEntity.ok(alunoS.searchAlunoId(id));
-    }
-
 //============== CREATE =====================
 
-    @PostMapping("create")
+    @PostMapping()
     @Operation(description = "Cadastra um novo aluno no sistema. Requer CPF, nome e data de nascimento.")
     public ResponseEntity<Aluno> cadastrarAluno(@RequestBody Aluno aluno) {
         Aluno novoAl = alunoS.addAlunos(aluno);
@@ -49,15 +46,17 @@ public class AlunoCtrl {
 
 //================ DELETE ========================
 
-    @DeleteMapping("/delete/id/{id}")
-    @Operation(description = "Remove um aluno do sistema usando seu ID como referência.")
-    public ResponseEntity<String> deletarAlunoId(@PathVariable int id) {
-        boolean delBoolean = alunoS.deleteAlunoId(id);
+    @DeleteMapping("/delete/{cpf}")
+    @Operation(description = "Remove um aluno do sistema usando seu ID/CPF como referência.")
+    public ResponseEntity<String> deletarAluno(@PathVariable String cpf) {
+        boolean delBoolean = alunoS.deleteAlunoCpf(cpf);
         if (delBoolean) {
             return ResponseEntity.ok("ok");
         }
         return ResponseEntity.ok("O id inserido não existe");
     }
+
+
 
 //=============== UPDATE ===========================
 
@@ -74,7 +73,7 @@ public class AlunoCtrl {
         Aluno alunoAtualizado = alunoS.updateAlunos(cpf, aluno);
         return ResponseEntity.ok(alunoAtualizado);
     }
-    //================== RELACIONAMENTO ========================
+    //================== LOGIN ========================
 
 
 

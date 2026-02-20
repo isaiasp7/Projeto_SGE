@@ -2,6 +2,7 @@ package P_api.Model;
 
 
 import Util.Utilities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class Aluno {
     //==========================================
     @OneToOne(mappedBy = "aluno_cpf", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //relacionamento um para muitos
-
+    @JsonBackReference
     private Matricula matriculas;
 
 
