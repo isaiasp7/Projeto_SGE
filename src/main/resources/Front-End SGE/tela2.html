@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGE | System Health</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #09090b;
+            --card: #121214;
+            --purple: #9333ea;
+            --green: #22c55e;
+            --border: rgba(255, 255, 255, 0.05);
+            --text: #fafafa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .status-dot { width: 12px; height: 12px; background: var(--green); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--green); }
+
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .metric-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 20px; }
+        .metric-card h4 { color: #71717a; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; }
+        .metric-card div { font-size: 1.8rem; font-weight: 600; }
+
+        /* Monitor de Logs (Console) */
+        .console-container {
+            background: #000; border: 1px solid var(--border); border-radius: 20px;
+            padding: 20px; height: 400px; display: flex; flex-direction: column;
+        }
+        .console-header { display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #1f1f23; padding-bottom: 10px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .console-body { 
+            flex: 1; overflow-y: auto; font-family: 'Fira Code', monospace; 
+            font-size: 0.85rem; line-height: 1.6; color: #a1a1aa;
+        }
+        .log-success { color: #4ade80; }
+        .log-info { color: #60a5fa; }
+        .log-warn { color: #fbbf24; }
+
+        .btn-back {
+            background: transparent; border: 1px solid var(--border); color: white;
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--purple); border-color: var(--purple); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>System Functions</h1>
+            <p><span class="status-dot"></span> API Gateway: Online (v1.0.4)</p>
+        </div>
+        <button class="btn-back" onclick="window.history.back()">Voltar ao Dashboard</button>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <h4>Tempo de Resposta Médio</h4>
+            <div>24ms</div>
+        </div>
+        <div class="metric-card">
+            <h4>Uptime do Servidor</h4>
+            <div>99.98%</div>
+        </div>
+        <div class="metric-card">
+            <h4>Endpoints Ativos</h4>
+            <div>8 Rotas</div>
+        </div>
+    </div>
+
+    <div class="console-container">
+        <div class="console-header">
+            <div class="dot" style="background: #ff5f56;"></div>
+            <div class="dot" style="background: #ffbd2e;"></div>
+            <div class="dot" style="background: #27c93f;"></div>
+            <span style="margin-left: 10px; font-size: 0.8rem; color: #52525b;">REST_API_MONITOR_SGE</span>
+        </div>
+        <div class="console-body" id="console">
+            </div>
+    </div>
+
+    <script>
+        const logs = [
+            { type: 'info', msg: 'Iniciando contexto do Spring Boot...' },
+            { type: 'success', msg: 'Conectado com sucesso ao banco de dados H2.' },
+            { type: 'info', msg: 'Mapeando endpoint: GET /SGE/alunoCrud' },
+            { type: 'info', msg: 'Mapeando endpoint: POST /SGE/alunoCrud' },
+            { type: 'success', msg: 'Tomcat iniciado na porta 8080 (http)' },
+            { type: 'warn', msg: 'CORS habilitado para todas as origens (*)' }
+        ];
+
+        const consoleBody = document.getElementById('console');
+
+        function addLog(type, msg) {
+            const time = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.className = `log-${type}`;
+            div.innerHTML = `[${time}] <span style="color: #52525b;">${type.toUpperCase()}</span>: ${msg}`;
+            consoleBody.appendChild(div);
+            consoleBody.scrollTop = consoleBody.scrollHeight;
+        }
+
+        // Simula logs em tempo real
+        logs.forEach((log, i) => {
+            setTimeout(() => addLog(log.type, log.msg), i * 800);
+        });
+
+        // Adiciona um log aleatório a cada 5 segundos para simular tráfego
+        setInterval(() => {
+            addLog('info', 'Requisição recebida: GET /SGE/alunoCrud - Origem: localhost:5500');
+        }, 5000);
+    </script>
+</body>
+</html>

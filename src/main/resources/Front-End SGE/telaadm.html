@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGE | Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #050507;
+            --card: #121214;
+            --purple: #9333ea;
+            --purple-glow: rgba(147, 51, 234, 0.3);
+            --border: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-muted: #71717a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: var(--text-main); display: flex; height: 100vh; }
+
+        /* Sidebar Flutuante Customizada para ADM */
+        .nav-dock {
+            width: 100px; display: flex; flex-direction: column; align-items: center;
+            padding: 40px 0; border-right: 1px solid var(--border);
+            background: linear-gradient(180deg, var(--card) 0%, transparent 100%);
+        }
+        .nav-item {
+            width: 54px; height: 54px; border-radius: 18px; display: flex;
+            align-items: center; justify-content: center; color: var(--text-muted);
+            margin-bottom: 20px; transition: 0.4s; cursor: pointer; text-decoration: none;
+        }
+        .nav-item:hover, .nav-item.active { 
+            background: var(--purple); color: white; 
+            box-shadow: 0 0 20px var(--purple-glow); transform: scale(1.1);
+        }
+
+        /* Área de Conteúdo */
+        .container { flex: 1; padding: 60px; overflow-y: auto; }
+
+        .welcome-header { margin-bottom: 50px; animation: slideDown 0.8s ease; }
+        .welcome-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; }
+        .welcome-header span { color: var(--purple); }
+
+        /* Grid de Status em Tempo Real */
+        .stats-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+            gap: 25px; margin-bottom: 40px; 
+        }
+        .stat-card {
+            background: var(--card); border: 1px solid var(--border);
+            padding: 30px; border-radius: 24px; position: relative; overflow: hidden;
+            transition: 0.3s;
+        }
+        .stat-card:hover { border-color: var(--purple); transform: translateY(-5px); }
+        .stat-card i { 
+            position: absolute; right: -10px; bottom: -10px; 
+            font-size: 5rem; opacity: 0.05; color: var(--purple); 
+        }
+        .stat-value { font-size: 2.2rem; font-weight: 700; display: block; margin-top: 10px; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Painel de Saúde do Sistema */
+        .system-health {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 25px;
+        }
+        .health-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 24px; padding: 30px;
+        }
+        .health-card h3 { margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Simulação de Log de API */
+        .api-log { font-family: 'Courier New', monospace; font-size: 0.85rem; color: #4ade80; }
+        .log-entry { margin-bottom: 8px; border-left: 2px solid var(--purple); padding-left: 10px; opacity: 0.8; }
+
+        /* Botão de Ação Rápida */
+        .quick-action {
+            background: var(--purple); color: white; padding: 15px 30px; 
+            border-radius: 100px; border: none; font-weight: 600; cursor: pointer;
+            margin-top: 20px; transition: 0.3s;
+        }
+        .quick-action:hover { box-shadow: 0 0 30px var(--purple-glow); }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-dock">
+        <div class="nav-item active"><i class="fas fa-chart-pie"></i></div>
+        <a href="index.html" class="nav-item"><i class="fas fa-users-cog"></i></a>
+        <div class="nav-item"><i class="fas fa-server"></i></div>
+        <div class="nav-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i></div>
+    </nav>
+
+    <main class="container">
+        <header class="welcome-header">
+            <h1>Bem-vindo, <span>Administrador</span></h1>
+            <p style="color: var(--text-muted)">O sistema está operando normalmente. Aqui está o sumário global.</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total de Alunos</span>
+                <span class="stat-value" id="count-alunos">--</span>
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Requisições API/Hora</span>
+                <span class="stat-value">1,284</span>
+                <i class="fas fa-network-wired"></i>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Saúde do Banco</span>
+                <span class="stat-value" style="color: #4ade80;">99.9%</span>
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Disciplinas Ativas</span>
+                <span class="stat-value">24</span>
+                <i class="fas fa-book-open"></i>
+            </div>
+        </div>
+
+        <div class="system-health">
+            <div class="health-card">
+                <h3><i class="fas fa-stream" style="color: var(--purple)"></i> Atividade Recente da API</h3>
+                <div class="api-log" id="api-log">
+                    <div class="log-entry">[INFO] GET /SGE/alunoCrud - 200 OK (24ms)</div>
+                    <div class="log-entry">[INFO] POST /SGE/alunoCrud - 201 Created (48ms)</div>
+                    <div class="log-entry">[INFO] GET /SGE/disciplinas - 200 OK (12ms)</div>
+                    <div class="log-entry">[WARN] Tentativa de login suspeita: IP 192.168.1.45</div>
+                </div>
+                <button class="quick-action" onclick="location.href='gerencia_alunos.html'">Abrir Gerenciamento Full</button>
+            </div>
+
+            <div class="health-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--purple); display: flex; align-items: center; justify-content: center; margin-bottom: 15px; box-shadow: 0 0 20px var(--purple-glow);">
+                    <span style="font-size: 1.5rem; font-weight: 700;">85%</span>
+                </div>
+                <h4>Armazenamento</h4>
+                <p style="color: var(--text-muted); font-size: 0.8rem;">2.4GB de 5GB utilizados</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { AlunoService } from './api.js';
+
+        // Carregar contagem real ao entrar na tela
+        async function initDashboard() {
+            try {
+                const alunos = await AlunoService.listarTodos();
+                document.getElementById('count-alunos').innerText = alunos.length;
+            } catch (err) {
+                document.getElementById('count-alunos').innerText = "OFF";
+            }
+        }
+
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>
