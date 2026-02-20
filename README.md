@@ -1,4 +1,4 @@
-# Projeto Back-end : Gerenciamento de um sistema escolar
+# Projeto Back-end : Sistema de Gerenciamento Escolar(SGE)
 
 *Esse projeto foi desenvolvimento ao longo da matéria de Web 2, no curso de sistemas para internet(IFPE).*
 *A proposta era desenvolver uma API REST para um âmbito a escolha do aluno.*
