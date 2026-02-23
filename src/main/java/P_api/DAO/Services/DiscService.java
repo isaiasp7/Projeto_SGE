@@ -31,12 +31,24 @@ public class DiscService {
     }
 
     public Disciplina createDisciplina(Disciplina disciplina) {
+        if (disciplina == null) {
+            throw new IllegalArgumentException("Disciplina é obrigatória");
+        }
+        if (disciplina.getNome() == null || disciplina.getNome().isBlank()) {
+            throw new IllegalArgumentException("Nome da disciplina é obrigatório");
+        }
+        if (disciplina.getCargaHoraria() == null) {
+            throw new IllegalArgumentException("Carga horária da disciplina é obrigatória");
+        }
         Disciplina novaD = new Disciplina(disciplina);
         discRepository.save(novaD);
         return novaD;
     }
 
     public Disciplina getDisciplinaById(long id) {
+        if (id <= 0) {
+            return null;
+        }
         Optional<Disciplina> disc = discRepository.findById(id);
         if (disc.isPresent()) {
             return disc.get();
@@ -47,6 +59,9 @@ public class DiscService {
     }
 
     public void deleteDisciplinaById(int id) {
+        if (id <= 0) {
+            return;
+        }
         Optional<Disciplina> disc = discRepository.findById((long) id);
         if (disc.isPresent()) {
             discRepository.delete(disc.get());
@@ -57,8 +72,11 @@ public class DiscService {
 
 
     public Disciplina relacionaDT(long idDisciplina, long idTurma) {
+        if (idDisciplina <= 0 || idTurma <= 0) {
+            return null;
+        }
         Disciplina disc = this.getDisciplinaById(idDisciplina);
-        Turma turma = turmasRepository.getReferenceById(idTurma);
+        Turma turma = turmasRepository.findById(idTurma).orElse(null);
         if (disc != null && turma != null) {
             disc.setTurma(turma);
             discRepository.save(disc);
@@ -72,7 +90,13 @@ public class DiscService {
     //Problema: nome é necessario para associar prof a disc
     //====================
     public Disciplina updateDisciplina( long id, Disciplina alterDiscService) {
+        if (alterDiscService == null) {
+            throw new IllegalArgumentException("Alterações da disciplina são obrigatórias");
+        }
         Disciplina disc = this.getDisciplinaById(id);
+        if (disc == null) {
+            return null;
+        }
 
         try {
             for (Map.Entry<String, Object> camposAlter : reflexao(alterDiscService).entrySet()) {
@@ -80,27 +104,29 @@ public class DiscService {
                 Object val = camposAlter.getValue();
                 Field field = Disciplina.class.getDeclaredField(key);//pega o atributo
                 field.setAccessible(true);//isso é usado para dizer que mesmo o atributo sendo privado posso acessa-lo
-                if(key=="id"){//O HIBERNATE PODE ESTAR GERANDO UM NOVO IID  PARA DISCIPLNA POR CONTA DO ID DO PROFESSOR PASSADO
+                if ("id".equals(key)) {//O HIBERNATE PODE ESTAR GERANDO UM NOVO IID  PARA DISCIPLNA POR CONTA DO ID DO PROFESSOR PASSADO
                     /*System.out.println("=====================");
                     System.out.println("ENCONTREI O ID, MAS DEIXEI QUIETO => "+key+" : "+val);
                     System.out.println("=====================");*/
                     continue;
                 }
-                if(key=="professor"){//veriica se o campo é professor
+                if ("professor".equals(key)) {//veriica se o campo é professor
                     System.out.println("=====================");
                     System.out.println("PROFESSOR FOI PASSADO");
                     System.out.println("=====================");
                     Professor professor = (Professor) val;
-                    if(profRepository.findById(professor.getId())==null){//verifica se professor não existe
+                    if (professor == null || profRepository.findById(professor.getId()).isEmpty()) {//verifica se professor não existe
                         continue;
                     }else{
                         System.out.println("=====================");
                         System.out.println("ELE EXISTE");
                         System.out.println("=====================");
-                        //Professor prof = profRepository.findById(((Professor) val).getId()).orElse(null);
-
-                        professor.setDisciplina_fk(disc);//garantido que a tabela prof tera a disciplina
-                        profRepository.save(professor);
+                        Professor profExistente = profRepository.findById(professor.getId()).orElse(null);
+                        if (profExistente == null) {
+                            continue;
+                        }
+                        profExistente.setDisciplina_fk(disc);//garantindo que a tabela prof tera a disciplina
+                        profRepository.save(profExistente);
                         //profService.updateProf(prof) seria necessario se não tivevesse @OneToOne(cascade = CascadeType.ALL) no relacionamento para  professor receber a disciplina sua tabela tbm
                     }
                 }

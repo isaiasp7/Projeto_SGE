@@ -12,7 +12,6 @@ import lombok.Setter;
 @Table(name="professor")
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Professor {
 
     @Id
@@ -24,10 +23,12 @@ public class Professor {
     private String email;
     private String telefone;
 
-    //====================DISCIPLINA=======================
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "disciplina_id")//cria uma tabela chamada disciplina_id em professor
+    @Column(name = "senha", nullable = false)
+    private String senha;
 
+    //====================DISCIPLINA=======================
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "disciplina_id", nullable = true)
     private Disciplina disciplina_fk;
 
     public Professor() {
@@ -39,6 +40,7 @@ public class Professor {
         this.disciplina_fk = professor.getDisciplina_fk();
         this.id= Utilities.gerar_id("professor");
         this.telefone = professor.getTelefone();
+        this.senha = "Professor2026";
     }
 
     public Professor(String nome, Disciplina disciplina_fk, String telefone) {
@@ -47,30 +49,19 @@ public class Professor {
         this.disciplina_fk = disciplina_fk;
         this.id=(int)Utilities.gerar_id("professor");
         this.telefone = telefone;
+        this.senha = "Professor2026";
     }
     public Professor( String nome, String telefone) {
         this.nome = nome;
         this.id=(int)Utilities.gerar_id("professor");
         this.email = Utilities.gerar_email(this.getNome());
         this.telefone = telefone;
+        this.senha = "Professor2026";
 
     }
-
-
-
-    public void setNome(String nome) {
-        if (nome!=null) {
-            this.nome = nome;
-        }
-
-
-    }
-
-
-
-
-
-
-
+   
 
 }
+
+
+

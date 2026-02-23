@@ -14,99 +14,23 @@
         <div class="login-card">
             <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
             <h1 style="margin-bottom: 30px;">SGE <br>School Management System</h1>
+
             <div class="input-group">
-                <input type="text" placeholder="Usuário">
+                <input id="login-usuario" type="text" placeholder="Usuário (CPF do aluno, ID do professor ou admin)">
             </div>
+
             <div class="input-group">
-                <input type="password" placeholder="Senha">
+                <input id="login-senha" type="password" placeholder="Senha">
             </div>
-            <button class="btn-login" onclick="goToProfiles()">Entrar no Sistema</button>
-        </div>
-    </section>
 
-    <section id="profile-screen">
-        <h1 style="font-size: 2.5rem;">Quem está acessando?</h1>
-        <div class="profile-grid">
-            <div class="profile-card" onclick="goToDashboard('Professor')">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <h3>Professor</h3>
-            </div>
-            <div class="profile-card" onclick="goToDashboard('Administrador')">
-                <i class="fas fa-user-shield"></i>
-                <h3>Administrador</h3>
-            </div>
-            <div class="profile-card" onclick="goToDashboard('Aluno')">
-                <i class="fas fa-user-graduate"></i>
-                <h3>Aluno</h3>
+            <button id="btn-login" class="btn-login">Entrar no Sistema</button>
+
+            <div class="login-links" >
+                <a href="#" id="link-esqueci-senha">Esqueci minha senha</a>
             </div>
         </div>
     </section>
 
-    <section id="dashboard-screen">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-            <div>
-                <h1 id="welcome-msg">Bem-vindo, Adm</h1>
-                <p style="color: var(--text-muted)">Aqui está o resumo do sistema hoje.</p>
-            </div>
-            <button class="btn-login" style="width: auto; padding: 10px 25px;" onclick="location.href='gerencia_alunos.html'">Ir para Gerenciamento <i class="fas fa-arrow-right"></i></button>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <i class="fas fa-users"></i>
-                <span>Total Alunos</span>
-                <h2 id="count-alunos">0</h2>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-book-open"></i>
-                <span>Disciplinas</span>
-                <h2>12</h2>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-clock"></i>
-                <span>Aulas Hoje</span>
-                <h2>8</h2>
-            </div>
-            <div class="stat-card" style="border-color: var(--purple);">
-                <i class="fas fa-check-double"></i>
-                <span>Presença Média</span>
-                <h2>94%</h2>
-            </div>
-        </div>
-
-        <h3 style="margin-bottom: 20px;">Atividade da Rede (API)</h3>
-        <div class="chart-placeholder">
-            <div class="bar" style="height: 40%"></div>
-            <div class="bar" style="height: 70%"></div>
-            <div class="bar" style="height: 55%"></div>
-            <div class="bar" style="height: 90%"></div>
-            <div class="bar" style="height: 30%"></div>
-            <div class="bar" style="height: 85%"></div>
-        </div>
-    </section>
-
-    <script type="module">
-        import { AlunoService } from './api.js';
-
-        // Navegação de Telas
-        window.goToProfiles = () => {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('profile-screen').style.display = 'flex';
-        };
-
-        window.goToDashboard = async (perfil) => {
-            document.getElementById('profile-screen').style.display = 'none';
-            document.getElementById('dashboard-screen').style.display = 'block';
-            document.getElementById('welcome-msg').innerText = `Olá, ${perfil}`;
-            
-            // Buscar dados reais da sua API para a Visão Geral
-            try {
-                const alunos = await AlunoService.listarTodos();
-                document.getElementById('count-alunos').innerText = alunos.length;
-            } catch (e) {
-                document.getElementById('count-alunos').innerText = "ERR";
-            }
-        };
-    </script>
+    <script type="module" src="../js/login.js"></script>
 </body>
 </html>

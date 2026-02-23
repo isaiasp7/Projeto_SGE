@@ -25,6 +25,14 @@ body { background: var(--bg); color: var(--text); overflow: hidden; height: 100v
     width: 450px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     animation: fadeIn 1s ease-out;
 }
+.login-links>a{
+    margin-top: 15px; 
+    display: flex; 
+    justify-content: end; 
+    font-size: 0.9rem;
+    color: #fafafa;
+    text-decoration:none   ;
+}
 
 .login-card .logo-icon {
     font-size: 3rem; color: var(--purple); margin-bottom: 20px;

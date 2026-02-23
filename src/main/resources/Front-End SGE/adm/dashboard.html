@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGE | Painel Administrativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #050507;
+            --card: #121214;
+            --purple: #9333ea;
+            --purple-glow: rgba(147, 51, 234, 0.3);
+            --border: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-muted: #71717a;
+            --danger: #ef4444;
+            --green: #22c55e;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: var(--text-main); display: flex; height: 100vh; }
+
+        .nav-dock {
+            width: 90px; display: flex; flex-direction: column; align-items: center;
+            padding: 24px 0; border-right: 1px solid var(--border);
+            background: linear-gradient(180deg, var(--card) 0%, transparent 100%);
+        }
+        .nav-item {
+            width: 50px; height: 50px; border-radius: 14px; display: flex;
+            align-items: center; justify-content: center; color: var(--text-muted);
+            margin-bottom: 12px; transition: 0.3s; cursor: pointer; text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: var(--purple); color: white;
+            box-shadow: 0 0 20px var(--purple-glow); transform: scale(1.05);
+        }
+        .nav-item[data-section="logout"] { margin-top: auto; }
+
+        .container { flex: 1; padding: 40px; overflow-y: auto; }
+
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+        }
+        .section-header h1 { font-size: 1.8rem; font-weight: 700; }
+        .section-header h1 span { color: var(--purple); }
+
+        .btn-glow {
+            background: var(--purple); color: white; border: none;
+            padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .btn-glow:hover { box-shadow: 0 0 25px var(--purple-glow); transform: translateY(-2px); }
+
+        .sub-nav { display: flex; gap: 10px; margin-bottom: 20px; }
+        .sub-nav-btn {
+            background: var(--card); border: 1px solid var(--border); color: var(--text-muted);
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.3s;
+        }
+        .sub-nav-btn:hover, .sub-nav-btn.active { border-color: var(--purple); color: var(--purple); }
+
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; transition: 0.3s;
+        }
+        .card:hover { border-color: var(--purple); transform: translateY(-3px); }
+        .card h3 { font-size: 1.1rem; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .card p i { width: 16px; color: var(--purple); }
+        .card-actions { margin-top: 16px; display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+        .action-btn {
+            background: transparent; border: 1px solid var(--border); color: var(--text-main);
+            padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; flex: 1; font-size: 0.85rem;
+        }
+        .action-btn:hover { background: rgba(147, 51, 234, 0.1); border-color: var(--purple); color: var(--purple); }
+        .action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+        .side-panel {
+            position: fixed; top: 0; right: -480px; width: 420px; height: 100vh;
+            background: var(--bg); border-left: 1px solid var(--border);
+            padding: 36px; transition: right 0.4s ease; z-index: 200;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.6); overflow-y: auto;
+        }
+        .side-panel.open { right: 0; }
+        .side-panel h2 { margin-bottom: 24px; font-weight: 600; }
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; }
+        .input-group input, .input-group select {
+            width: 100%; background: var(--card); border: 1px solid var(--border);
+            color: var(--text-main); padding: 12px 14px; border-radius: 10px; outline: none;
+        }
+        .panel-actions { display: flex; gap: 12px; margin-top: 28px; }
+        .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 12px; border-radius: 10px; cursor: pointer; flex: 1; }
+        .btn-cancel:hover { border-color: var(--text-muted); }
+
+        .loading { text-align: center; color: var(--purple); padding: 60px; font-size: 1.2rem; }
+        .loading i { margin-right: 10px; }
+        .empty-msg { color: var(--text-muted); text-align: center; padding: 40px; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Review / Dashboard */
+        .review-welcome { margin-bottom: 32px; }
+        .review-welcome h2 { font-size: 1.5rem; margin-bottom: 8px; }
+        .review-welcome p { color: var(--text-muted); }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .stat-box {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 24px; text-align: center;
+        }
+        .stat-box .value { font-size: 2rem; font-weight: 700; color: var(--purple); display: block; }
+        .stat-box .label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        .stat-box .pct { font-size: 1.1rem; color: var(--green); margin-top: 8px; }
+        .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+        @media (max-width: 900px) { .chart-row { grid-template-columns: 1fr; } }
+        .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+        .chart-card h4 { margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; }
+        .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+        .bar-row { display: flex; align-items: center; gap: 12px; }
+        .bar-row span { min-width: 80px; font-size: 0.9rem; color: var(--text-muted); }
+        .bar-track { flex: 1; height: 24px; background: rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--purple), #a855f7); border-radius: 12px; transition: width 0.5s ease; }
+        .review-text { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; color: var(--text-muted); line-height: 1.7; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-dock">
+        <div class="nav-item active" data-section="review" title="Visão Geral"><i class="fas fa-chart-pie"></i></div>
+        <div class="nav-item" data-section="professores" title="Professores"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div class="nav-item" data-section="alunos" title="Alunos"><i class="fas fa-user-graduate"></i></div>
+        <div class="nav-item" data-section="turmas" title="Turmas"><i class="fas fa-school"></i></div>
+        <div class="nav-item" data-section="disciplinas" title="Disciplinas"><i class="fas fa-book"></i></div>
+        <a href="../login/login.html" class="nav-item" data-section="logout" title="Sair"><i class="fas fa-sign-out-alt"></i></a>
+    </nav>
+
+    <main class="container">
+        <!-- REVIEW / VISÃO GERAL -->
+        <section id="section-review" class="section active">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-pie"></i> <span>Visão Geral do Sistema</span></h1>
+            </div>
+            <div class="review-welcome">
+                <h2>Bem-vindo ao painel administrativo</h2>
+                <p>Resumo percentual, gráficos e indicadores do SGE.</p>
+            </div>
+            <div class="stats-row" id="review-stats">
+                <div class="stat-box"><span class="value" id="r-alunos">--</span><span class="label">Alunos</span></div>
+                <div class="stat-box"><span class="value" id="r-professores">--</span><span class="label">Professores</span></div>
+                <div class="stat-box"><span class="value" id="r-turmas">--</span><span class="label">Turmas</span></div>
+                <div class="stat-box"><span class="value" id="r-disciplinas">--</span><span class="label">Disciplinas</span></div>
+                <div class="stat-box"><span class="value" id="r-matriculas">--</span><span class="label">Matrículas</span></div>
+                <div class="stat-box"><span class="value" id="r-notas">--</span><span class="label">Notas</span></div>
+            </div>
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h4>Ocupação das turmas (%)</h4>
+                    <div class="bar-chart" id="chart-turmas"></div>
+                </div>
+                <div class="chart-card">
+                    <h4>Distribuição (alunos vs professores)</h4>
+                    <div class="bar-chart" id="chart-distribuicao"></div>
+                </div>
+            </div>
+            <div class="review-text" id="review-text">
+                Carregando resumo...
+            </div>
+        </section>
+
+        <!-- PROFESSORES -->
+        <section id="section-professores" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-chalkboard-teacher"></i> <span>Professores</span></h1>
+                <button class="btn-glow" onclick="adm.abrirFormProfessor()"><i class="fas fa-plus"></i> Novo Professor</button>
+            </div>
+            <div id="grid-professores" class="data-grid"></div>
+            <div id="loading-professores" class="loading" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Carregando...</div>
+        </section>
+
+        <!-- ALUNOS -->
+        <section id="section-alunos" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-user-graduate"></i> <span>Alunos</span></h1>
+                <button class="btn-glow" onclick="adm.abrirFormAluno()"><i class="fas fa-plus"></i> Novo Aluno</button>
+            </div>
+            <div id="grid-alunos" class="data-grid"></div>
+            <div id="loading-alunos" class="loading" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Carregando...</div>
+        </section>
+
+        <!-- TURMAS -->
+        <section id="section-turmas" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-school"></i> <span>Turmas</span></h1>
+                <button class="btn-glow" onclick="adm.abrirFormTurma()"><i class="fas fa-plus"></i> Nova Turma</button>
+            </div>
+            <div id="grid-turmas" class="data-grid"></div>
+            <div id="loading-turmas" class="loading" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Carregando...</div>
+        </section>
+
+        <!-- DISCIPLINAS + NOTAS -->
+        <section id="section-disciplinas" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-book"></i> <span>Disciplinas</span></h1>
+                <button class="btn-glow" onclick="adm.abrirFormDisciplina()"><i class="fas fa-plus"></i> Nova Disciplina</button>
+            </div>
+            <div class="sub-nav">
+                <button class="sub-nav-btn active" data-sub="lista">Lista de Disciplinas</button>
+                <button class="sub-nav-btn" data-sub="notas">Disciplina &gt; Aluno (Notas)</button>
+                <button class="btn-glow" onclick="adm.abrirFormNota()" style="margin-left:auto;"><i class="fas fa-plus"></i> Adicionar Nota</button>
+            </div>
+            <div id="sub-lista" class="sub-content">
+                <div id="grid-disciplinas" class="data-grid"></div>
+            </div>
+            <div id="sub-notas" class="sub-content" style="display:none;">
+                <div class="input-group" style="max-width:300px;margin-bottom:20px;">
+                    <label>Filtrar por Disciplina</label>
+                    <select id="select-disc-notas" onchange="adm.carregarNotas()"></select>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Aluno</th><th>Disciplina</th><th>Nota 1</th><th>Nota 2</th><th>Média</th><th>Situação</th></tr></thead>
+                        <tbody id="tbody-notas"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="loading-disciplinas" class="loading" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Carregando...</div>
+        </section>
+    </main>
+
+    <div class="side-panel" id="formPanel">
+        <h2 id="formTitle">Formulário</h2>
+        <div id="formContent"></div>
+    </div>
+
+    <script type="module" src="../js/telaadm-script.js"></script>
+</body>
+</html>

@@ -8,7 +8,9 @@ import P_api.Exceptions.Erros.FalhaRelacionamento;
 import P_api.Factory.ClassFactory;
 import P_api.Model.Disciplina;
 import P_api.Model.Professor;
+import Util.Utilities;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,7 @@ public class ProfService {
     @Autowired
     private DisciplinasRepository disciplinasRepository;
 
+    @Transactional
     public Professor newProfessor(Professor professor) { //testar add prof já com uma disciplina
 
 

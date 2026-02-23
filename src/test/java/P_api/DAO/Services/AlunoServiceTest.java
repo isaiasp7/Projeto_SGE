@@ -117,7 +117,7 @@ class AlunoServiceTest {
     public void deve_deletar_aluno() {//
         this.alunoService.saveAlunos(aluno);
         alunoService.deleteAlunoCpf(aluno.getCpf());
-        assertNotNull(alunoService.searchAluno("02356987452"));
+        assertThrows(EntidadeNaoEncontrada.class, () ->alunoService.searchAluno("02543987452"));
 
     }
     @Test

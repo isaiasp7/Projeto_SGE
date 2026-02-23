@@ -34,3 +34,7 @@ Em termos arquiteturais, houve vazamento de estado entre contextos de persistên
     Isso melhora, principalmenta, a arquitetura diminuindo a quantidade de requisições ao banco, por outro lado pode-se
     usar disso para se ter uma melhor apresentação no FRONT.
         2.2 Com isso haverão dois tipos de pesquisas, em contexto e global
+
+
+
+6 - Melhorias no frontend:

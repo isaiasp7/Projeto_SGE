@@ -1,5 +1,5 @@
 // app.js
-import { AlunoService } from './api.js';
+import { AlunoService } from './js/api.js';
 
 const DOM = {
     grid: document.getElementById('dataGrid'),

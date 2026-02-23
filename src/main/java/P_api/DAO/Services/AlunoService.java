@@ -6,6 +6,7 @@ import P_api.DTO.AlunoDTO;
 import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Model.Aluno;
 import P_api.Model.Matricula;
+import Util.Utilities;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,21 @@ public class AlunoService {
     //=======================================================
 
 
+    @Transactional
     public Aluno addAlunos(Aluno aluno) {
-        Aluno novoAluno = new Aluno(aluno);
-        return alunoRepository.save(novoAluno); // Retorna o aluno cadastrado
+        if (aluno.getNome() == null || aluno.getNome().isBlank()) {
+            throw new IllegalArgumentException("Nome do aluno é obrigatório");
+        }
+        if (aluno.getCpf() == null || aluno.getCpf().isBlank()) {
+            throw new IllegalArgumentException("CPF do aluno é obrigatório");
+        }
+        if (aluno.getDataNasci() == null) {
+            throw new IllegalArgumentException("Data de nascimento do aluno é obrigatória");
+        }
+        if (aluno.getEmail() == null || aluno.getEmail().isBlank()) {
+            aluno.setEmail(Utilities.gerar_email(aluno.getNome()));
+        }
+        return alunoRepository.save(aluno);
     }
 
     //=====================UPDATE============================

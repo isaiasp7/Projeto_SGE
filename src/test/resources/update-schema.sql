@@ -1,10 +1,11 @@
 CREATE TABLE aluno
 (
-    cpf        VARCHAR(11) NOT NULL,
-    nome       VARCHAR(50) NOT NULL,
-    data_nasc  date        NOT NULL,
-    quant_falt INT NULL,
+    cpf        VARCHAR(11)  NOT NULL,
+    nome       VARCHAR(50)  NOT NULL,
+    data_nasc  date         NOT NULL,
+    quant_falt INT          NULL,
     email      VARCHAR(255) NULL,
+    senha      VARCHAR(255) NOT NULL,
     CONSTRAINT pk_aluno PRIMARY KEY (cpf)
 );
 
@@ -13,48 +14,49 @@ CREATE TABLE disciplina
     id            BIGINT      NOT NULL,
     nome          VARCHAR(50) NOT NULL,
     carga_horaria INT         NOT NULL,
-    turma_fk      BIGINT NULL,
+    turma_fk      BIGINT      NULL,
     CONSTRAINT pk_disciplina PRIMARY KEY (id)
 );
 
 CREATE TABLE matricula
 (
     id             BIGINT       NOT NULL,
-    data_matricula date NULL,
+    data_matricula date         NULL,
     status         VARCHAR(255) NOT NULL,
-    aluno_cpf      VARCHAR(11) NULL,
-    turma_id       BIGINT NULL,
+    aluno_cpf      VARCHAR(11)  NULL,
+    turma_id       BIGINT       NULL,
     CONSTRAINT pk_matricula PRIMARY KEY (id)
 );
 
 CREATE TABLE notas
 (
-    id             BIGINT NOT NULL,
+    id             BIGINT        NOT NULL,
     nota1          DECIMAL(5, 2) NULL,
     nota2          DECIMAL(5, 2) NULL,
     media          DECIMAL(5, 2) NULL,
-    situacao       VARCHAR(255) NULL,
-    matricula_fk   BIGINT NULL,
-    disciplinan_fk BIGINT NULL,
+    situacao       VARCHAR(255)  NULL,
+    matricula_fk   BIGINT        NULL,
+    disciplinan_fk BIGINT        NULL,
     CONSTRAINT pk_notas PRIMARY KEY (id)
 );
 
 CREATE TABLE professor
 (
-    id            BIGINT      NOT NULL,
-    nome          VARCHAR(50) NOT NULL,
-    email         VARCHAR(50) NULL,
+    id            BIGINT       NOT NULL,
+    nome          VARCHAR(50)  NOT NULL,
+    email         VARCHAR(50)  NULL,
     telefone      VARCHAR(255) NULL,
-    disciplina_id BIGINT NULL,
+    senha         VARCHAR(255) NOT NULL,
+    disciplina_id BIGINT       NULL,
     CONSTRAINT pk_professor PRIMARY KEY (id)
 );
 
 CREATE TABLE turma
 (
-    id               BIGINT NOT NULL,
+    id               BIGINT      NOT NULL,
     nome             VARCHAR(10) NULL,
-    capacidade_atual INT    NOT NULL,
-    capacidade_max   INT    NOT NULL,
+    capacidade_atual INT         NOT NULL,
+    capacidade_max   INT         NOT NULL,
     CONSTRAINT pk_turma PRIMARY KEY (id)
 );
 

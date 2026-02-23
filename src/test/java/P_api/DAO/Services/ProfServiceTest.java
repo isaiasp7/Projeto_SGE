@@ -49,6 +49,7 @@ class ProfServiceTest {
         Professor professo4 = new Professor("jose",  new Disciplina("hardware", 200), "5588988565845");
         Professor[] professores = {professor1,professor2,professor3, professo4};
         Arrays.stream(professores).forEach(profService::newProfessor);
+        int valor = profService.getAllProfessores().size();
         assertEquals(professores.length,profService.getAllProfessores().size());
 
         List<ProfDiscDTO> profBanco = profService.getAllProfessores();
