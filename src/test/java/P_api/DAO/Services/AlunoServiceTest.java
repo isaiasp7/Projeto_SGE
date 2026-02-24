@@ -65,13 +65,6 @@ class AlunoServiceTest {
         this.alunoService.saveAlunos(aluno);
         assertEquals("02543987452",alunoService.searchAluno(this.aluno.getCpf()).getCpf()); ;
     }
-    @Test
-    public void deve_adicionar_aluno() {//save
-        this.alunoService.saveAlunos(aluno);
-        assertNotNull(alunoService.searchAluno("02543987452"));
-
-
-    }
 
     @Test
     void deve_retornar_alunos() {
@@ -127,7 +120,7 @@ class AlunoServiceTest {
 
        assertNotNull(alunoService.updateAlunos(aluno.getCpf(), new AlunoDTO(5)));//verifica se os dados foram
         // atualizados
-        assertEquals(5,alunoService.searchAluno("02543987452").getQuant_faltas());//verifica se o antigo aluno agora
+        assertEquals(5,alunoService.searchAluno("02543987452").getQuantFaltas());//verifica se o antigo aluno agora
         // possui quantidade de faltas = 5
     }
 
@@ -138,6 +131,54 @@ class AlunoServiceTest {
         assertEquals(0,alunoService.getAlunos().size());
 
     }
+
+    @Test
+    public void exception_addAluno_semNome() {
+        Aluno semNome = new Aluno(
+                "11122233344",
+                null,
+                Date.from(
+                        LocalDate.of(2000, 1, 1)
+                                .atStartOfDay(ZoneId.systemDefault())
+                                .toInstant()
+                )
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> alunoService.addAlunos(semNome)
+        );
+    }
+
+    @Test
+    public void exception_addAluno_semCpf() {
+        Aluno semCpf = new Aluno(
+                null,
+                "Aluno Sem Cpf",
+                Date.from(
+                        LocalDate.of(2000, 1, 1)
+                                .atStartOfDay(ZoneId.systemDefault())
+                                .toInstant()
+                )
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> alunoService.addAlunos(semCpf)
+        );
+    }
+
+    @Test
+    public void exception_addAluno_semDataNascimento() {
+        Aluno semData = new Aluno(
+                "99988877766",
+                "Aluno Sem Data",
+                null
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> alunoService.addAlunos(semData)
+        );
+    }
+
     @Test
     public void exeception_searchCPF() {//lista vazia retornar um AlunoNaoEncontrado
         assertThrows(
@@ -146,6 +187,7 @@ class AlunoServiceTest {
         );
 
     }
+
     @Test
     public void exeception_searchID() {//
         assertThrows(
@@ -154,14 +196,56 @@ class AlunoServiceTest {
         );
 
     }
-    /*@Test
-    public void exeception_updateAlunoEmail(){//E NECESSÁRIO VALIDA EMAIL
-        aluno.setMatriculas(new Matricula());
-        alunoService.saveAlunos(aluno);
-        assertThrows(RuntimeException.class,
-                ()-> alunoService.updateAlunosId(aluno.getMatriculas().getId(),"")
-        );
-    }*/
 
+    @Test
+    public void exception_searchAlunoCpf_vazio() {
+        assertThrows(
+                EntidadeNaoEncontrada.class,
+                () -> alunoService.searchAluno("")
+        );
+    }
+
+    @Test
+    public void exception_updateAlunoEmail_semEmail() {
+        alunoService.saveAlunos(aluno);
+        Turma turma = new Turma("Historia",40);
+        turmaService.createTurma(turma);
+
+        MatriculaDTO matricula = matricService.createMatricula(this.aluno.getCpf(), turma.getId());
+
+        assertThrows(RuntimeException.class,
+                () -> alunoService.updateAlunoEmail(matricula.getId(), null)
+        );
+    }
+
+    @Test
+    public void exception_updateAlunoEmail_alunoNaoEncontrado() {
+        assertThrows(RuntimeException.class,
+                () -> alunoService.updateAlunoEmail(9999L, "email@teste.com")
+        );
+    }
+
+    @Test
+    public void exception_updateAlunosAlunoNaoEncontrado() {
+        AlunoDTO dto = new AlunoDTO(10);
+
+        assertThrows(EntidadeNaoEncontrada.class,
+                () -> alunoService.updateAlunos("00000000000", dto)
+        );
+    }
+
+    @Test
+    public void exception_deleteAlunoId_naoEncontrado() {
+        assertThrows(EntidadeNaoEncontrada.class,
+                () -> alunoService.deleteAlunoId(9999)
+        );
+    }
+
+    @Test
+    public void exception_deleteAlunoCpf_naoEncontrado() {
+        assertThrows(RuntimeException.class,
+                () -> alunoService.deleteAlunoCpf("00000000000")
+        );
+    }
 
 }

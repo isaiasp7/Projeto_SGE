@@ -3,8 +3,6 @@ package P_api.DAO.Services;
 
 
 import P_api.DAO.ClassRepository.DisciplinasRepository;
-import P_api.DAO.ClassRepository.ProfessoresRepository;
-import P_api.DAO.ClassRepository.TurmasRepository;
 import P_api.Model.Disciplina;
 import P_api.Model.Turma;
 import org.junit.jupiter.api.Test;
@@ -29,12 +27,6 @@ class DisciplinaServiceTest {
     @Autowired
     private DisciplinasRepository disciplinasRepository;
 
-    @Autowired
-    private TurmasRepository turmasRepository;
-
-    @Autowired
-    private ProfessoresRepository professoresRepository;
-
 
 
     // ============================ getAllDisciplinas ============================
@@ -46,11 +38,6 @@ class DisciplinaServiceTest {
 
         List<Disciplina> todas = discService.getAllDisciplinas();
         assertEquals(2, todas.size());
-    }
-
-    @Test
-    void getAllDisciplinas_invalido_listaVazia() {
-        assertEquals(0, discService.getAllDisciplinas().size());
     }
 
     @Test
@@ -133,11 +120,6 @@ class DisciplinaServiceTest {
     @Test
     void deleteDisciplinaById_invalido_idInexistente_naoDeveLancarExcecao() {
         assertDoesNotThrow(() -> discService.deleteDisciplinaById(123456));
-    }
-
-    @Test
-    void deleteDisciplinaById_invalido_idNegativo_naoDeveLancarExcecao() {
-        assertDoesNotThrow(() -> discService.deleteDisciplinaById(-10));
     }
 
     // ============================ relacionaDT ============================

@@ -29,20 +29,20 @@ public class Disciplina {
 
     //=======================PROFESSOR=========================
 
-    @OneToOne(mappedBy = "disciplina_fk")//disciplina_id é nome do atributo na class= professor que recebera o valores
+    @OneToOne(mappedBy = "disciplinaFk")//disciplina_id é nome do atributo na class= professor que recebera o valores
 
     private Professor professor;
 
     //====================== NOTAS ============================
 
 
-    @OneToMany(mappedBy = "disciplinaN_fk")
+    @OneToMany(mappedBy = "disciplinaFk")
     @JsonIgnore
     private List<Notas> notas = new ArrayList<>();
 
     //====================== TURMA ============================
     @ManyToOne
-    @JoinColumn(name = "turma_fk")
+    @JoinColumn(name = "turmaFk")
     //@JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Turma turma;
 

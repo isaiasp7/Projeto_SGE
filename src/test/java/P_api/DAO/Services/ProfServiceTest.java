@@ -1,8 +1,8 @@
 package P_api.DAO.Services;
 
 import P_api.DTO.ProfDiscDTO;
+import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Exceptions.Erros.FalhaRelacionamento;
-import P_api.Model.Aluno;
 import P_api.Model.Disciplina;
 import P_api.Model.Professor;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,16 +42,15 @@ class ProfServiceTest {
 
 
     @Test
-    void getAllProfessores() {
+    void getAllProfessores() throws InterruptedException {
         Professor professor1 = new Professor("messias", new Disciplina("Logic", 200), "5588988565845");
         Professor professor2 = new Professor("maduro",  new Disciplina("MAth", 200), "5588988565845");
         Professor professor3 = new Professor("carlos",  new Disciplina("philo", 200), "5588988565845");
         Professor professo4 = new Professor("jose",  new Disciplina("hardware", 200), "5588988565845");
         Professor[] professores = {professor1,professor2,professor3, professo4};
         Arrays.stream(professores).forEach(profService::newProfessor);
-        int valor = profService.getAllProfessores().size();
         assertEquals(professores.length,profService.getAllProfessores().size());
-
+        Thread.sleep(20000);
         List<ProfDiscDTO> profBanco = profService.getAllProfessores();
 
         Set<String> telefoneEsperados = Arrays.stream(professores)
@@ -105,10 +104,6 @@ class ProfServiceTest {
     //======================================= ERROS / EXECEPTION ================================================
 
     @Test
-    void newProfessorErro() {
-        assertNull(profService.getProfessorById(professor.getId())); //
-    }
-    @Test
     void relacionaProf_DiscExecption() {
         Professor profSalvo = profService.newProfessor(new Professor("ronaldo", "5588998874455"));
         assertThrows(FalhaRelacionamento.class,
@@ -116,5 +111,39 @@ class ProfServiceTest {
 
     }
 
+    @Test
+    void getProfessorById_naoEncontrado() {
+        assertNull(profService.getProfessorById(9999L));
+    }
+
+    @Test
+    void removeProfessor_naoEncontrado() {
+        assertThrows(EntidadeNaoEncontrada.class,
+                () -> profService.removeProfessor(9999L)
+        );
+    }
+
+    @Test
+    void relacionaProf_DiscProfessorInexistente() {
+        Disciplina disSalva = discService.createDisciplina(new Disciplina("Arquitetura", 80));
+
+        assertThrows(FalhaRelacionamento.class,
+                () -> profService.relacionaProf_Disc(9999L, disSalva.getId())
+        );
+    }
+
+    @Test
+    void updateProfessor_naoEncontrado() {
+        assertThrows(RuntimeException.class,
+                () -> profService.updateProfessor(9999L,
+                        new Professor("nao existe", "000000000"))
+        );
+    }
+
+    @Test
+    void getAllProfessores_vazio() {
+        List<ProfDiscDTO> professores = profService.getAllProfessores();
+        assertTrue(professores.isEmpty());
+    }
 
 }

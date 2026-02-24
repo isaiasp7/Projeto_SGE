@@ -26,23 +26,22 @@ public class Aluno {
     @Column(name = "nome", columnDefinition = "varchar(50)", nullable = false)
     private String nome;
 
-    @Column(columnDefinition = "date", name = "dataNasc", length = 10, nullable = false)
+    @Column(columnDefinition = "date",  length = 10, nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("dataNascimento")
-    private Date dataNasci;
+    private Date dataNascimento;
 
-    @Column(name = "quantFalt", length = 3)
-    private Integer Quant_faltas = 0;
+    @Column(length = 2)
+    private Integer quantFaltas = 0;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "senha", nullable = false)
+    @Column(nullable = false)
     private String senha ;
 
     //==========================================
 
-    @OneToOne(mappedBy = "aluno_cpf", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //relacionamento um para muitos
     @JsonBackReference
     private Matricula matriculas;
@@ -53,7 +52,7 @@ public class Aluno {
 
         this.cpf = cpf;
         this.nome = nome;
-        this.dataNasci = dataNasci;
+        this.dataNascimento = dataNasci;
         this.email = Utilities.gerar_email(this.nome);
         this.senha = "Aluno2026";
 
@@ -63,7 +62,7 @@ public class Aluno {
 
         this.cpf = aluno.getCpf();
         this.nome = aluno.getNome();
-        this.dataNasci = aluno.getDataNasci();
+        this.dataNascimento = aluno.getDataNascimento();
         this.email = Utilities.gerar_email(this.nome);
         this.senha = "Aluno2026";
 

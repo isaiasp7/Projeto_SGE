@@ -17,8 +17,8 @@ public class MatriculaDTO {
 
     public MatriculaDTO(Matricula matricula) {
         this.id = matricula.getId();
-        this.nome = matricula.getAluno_cpf().getNome();
-        this.aluno = new AlunoDTO(matricula.getAluno_cpf());
+        this.nome = matricula.getAluno().getNome();;
+        this.aluno = new AlunoDTO(matricula.getAluno());
         this.litlleTurma = new LitlleTurmaDTO(matricula.getTurma());
     }
 
@@ -29,6 +29,6 @@ public class MatriculaDTO {
     }
 
    /* public MatriculaDTO converterParaDTO(Matricula matricula) {
-        return new MatriculaDTO(matricula.getId(), matricula.getAluno_cpf().getNome());
+        return new MatriculaDTO(matricula.getId(), matricula.getAluno()().getNome());
     }*/
 }

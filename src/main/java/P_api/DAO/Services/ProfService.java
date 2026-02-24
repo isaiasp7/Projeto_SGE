@@ -75,7 +75,7 @@ public class ProfService {
         Disciplina disc = discService.getDisciplinaById(Did);
         if (profId.isPresent() && disc != null ) {
             Professor prof = this.getProfessorById(Pid);
-            prof.setDisciplina_fk(disc);
+            prof.setDisciplinaFk(disc);
             disc.setProfessor(prof);
             disciplinasRepository.save(disc);
             profRepository.save(prof);
@@ -107,7 +107,7 @@ public class ProfService {
                 if (key.equals("id")) {
                     continue;
                 } else if (key.equals("disciplina_fk")) {//tratar inexistencia de disciplina
-                    prof.setDisciplina_fk((Disciplina) val);
+                    prof.setDisciplinaFk((Disciplina) val);
                 }
                 field.set(prof, val);
 

@@ -43,7 +43,7 @@ public MatriculaDTO createMatricula(String aluno_cpf, long turma_id) {//Relacion
        Aluno aluno = alunoRepository.findByCpf(aluno_cpf).orElseThrow(()->new EntityNotFoundException("Aluno não encontrada"));
         // Criando a matrícula apenas se a turma for válida
         Matricula matricula = new Matricula();
-        matricula.setAluno_cpf(aluno);
+        matricula.setAluno(aluno);
         matricula.setTurma(turma);
         matricRepository.save(matricula);
         // Atualizando capacidade da turma apenas se a matrícula foi criada com sucesso
@@ -60,8 +60,8 @@ public MatriculaDTO createMatricula(String aluno_cpf, long turma_id) {//Relacion
     public String deletMatricula(long id){//dele apenas a matricula, aluno continua
         Matricula mat = this.seachID(id).orElseThrow(()->new EntityNotFoundException("Matricula não encontrada"));
         long idDel = mat.getId();
-        Aluno aluno = mat.getAluno_cpf();
-        mat.setAluno_cpf(null);
+        Aluno aluno = mat.getAluno();
+        mat.setAluno(null);
         aluno.setMatriculas(null);
         matricRepository.delete(mat);
         return  "A matricula "+ mat.getId()+" foi removida com sucesso.\n Mas o aluno "+ aluno.getNome()+ " ainda existe.";
@@ -69,7 +69,7 @@ public MatriculaDTO createMatricula(String aluno_cpf, long turma_id) {//Relacion
 
     public String deleteMatComp(long matricula){//delelta matricula e aluno
         Matricula mat = this.seachID(matricula).orElseThrow(()->new EntityNotFoundException("Matricula não encontrada"));
-        Aluno aluno = mat.getAluno_cpf();
+        Aluno aluno = mat.getAluno();
         alunoRepository.delete(aluno);
         matricRepository.delete(mat);
         return  "O aluno"+  aluno.getNome()+" que corresponde a matricula:"+mat.getId()+ ", foi removido com sucesso.";
@@ -103,7 +103,7 @@ public MatriculaDTO createMatricula(String aluno_cpf, long turma_id) {//Relacion
         LocalDate hoje = LocalDate.now();
         Matricula mat = new Matricula();
         aluno.setMatriculas(mat);
-        mat.setAluno_cpf(aluno);
+        mat.setAluno(aluno);
         mat.setDataMatricula(hoje);
         alunoRepository.save(aluno);
         return aluno;

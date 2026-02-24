@@ -40,10 +40,10 @@ public class ClassFactory {
         dto.setEmail(professor.getEmail());
         dto.setTelefone(professor.getTelefone());
 
-        if (professor.getDisciplina_fk() != null) { // Verifica se a disciplina não é nula
+        if (professor.getDisciplinaFk() != null) { // Verifica se a disciplina não é nula
             DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
-            disciplinaDTO.setId(professor.getDisciplina_fk().getId());
-            disciplinaDTO.setNome(professor.getDisciplina_fk().getNome());
+            disciplinaDTO.setId(professor.getDisciplinaFk().getId());
+            disciplinaDTO.setNome(professor.getDisciplinaFk().getNome());
             // disciplinaDTO.setCargaHoraria(professor.getDisciplina().getCargaHoraria());
 
             dto.setDisciplina(disciplinaDTO);

@@ -25,17 +25,15 @@ public class Notas {
     //===================MATRICULA=====================
 
     @ManyToOne
-    @JoinColumn(name = "matricula_fk",unique = true)
-
-    private Matricula matricula_fk;
+    @JoinColumn(name ="matriculaFk" , unique = true)
+    private Matricula matriculaFk;
 
 
 //             DISCIPLINA
 
     @ManyToOne
-    @JoinColumn(name = "disciplinaN_fk")
-
-    private Disciplina disciplinaN_fk;
+    @JoinColumn(name = "disciplinaFk")
+    private Disciplina disciplinaFk;
 
 
     //====================================
@@ -48,8 +46,8 @@ public class Notas {
 
     public Notas(Matricula matricula_fk,Disciplina disciplinaN_fk, float nota1, float nota2) {
         this.id=(int) Utilities.gerar_id("notas");
-        this.disciplinaN_fk=disciplinaN_fk;
-        this.matricula_fk = matricula_fk;
+        this.disciplinaFk=disciplinaN_fk;
+        this.matriculaFk = matricula_fk;
         this.nota1 = nota1;
         this.nota2 = nota2;
         this.setMedia();

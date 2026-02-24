@@ -66,7 +66,7 @@ public class Turma {
     public List<MatriculaDTO> getMatriculasDTO() {
 
         return this.getMatriculas().stream()
-                .map(m -> new MatriculaDTO(m.getId(),m.getAluno_cpf().getNome(),m.getAluno_cpf())) // Mapeia cada matrícula para um DTO
+                .map(m -> new MatriculaDTO(m.getId(),m.getAluno().getNome(),m.getAluno())) // Mapeia cada matrícula para um DTO
                 .collect(Collectors.toList());
     }
 

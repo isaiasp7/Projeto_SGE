@@ -41,7 +41,7 @@ public class AlunoService {
                 matricService.seachID(matriculaId)
                         .orElseThrow(() -> new EntidadeNaoEncontrada("Aluno não encontrado"));
 
-        return matricula.getAluno_cpf();
+        return matricula.getAluno();
 
     }
 
@@ -52,8 +52,9 @@ public class AlunoService {
 
 
     @Transactional
-    public Aluno addAlunos(Aluno aluno) {
-        if (aluno.getNome() == null || aluno.getNome().isBlank()) {
+    public Aluno addAlunos(Aluno aluno) {//REFATORAR
+        Aluno newAluno = new Aluno(aluno);
+        /*if (aluno.getNome() == null || aluno.getNome().isBlank()) {
             throw new IllegalArgumentException("Nome do aluno é obrigatório");
         }
         if (aluno.getCpf() == null || aluno.getCpf().isBlank()) {
@@ -65,7 +66,10 @@ public class AlunoService {
         if (aluno.getEmail() == null || aluno.getEmail().isBlank()) {
             aluno.setEmail(Utilities.gerar_email(aluno.getNome()));
         }
-        return alunoRepository.save(aluno);
+        if (aluno.getSenha() == null || aluno.getSenha().isBlank()) {
+            aluno.setEmail(Utilities.gerar_email(aluno.getNome()));
+        }*/
+        return alunoRepository.save(newAluno);
     }
 
     //=====================UPDATE============================
@@ -102,7 +106,7 @@ public class AlunoService {
         try {
 
             if(alunoAtualizado.getQuant_faltas()!=null) {
-                alunoExistente.setQuant_faltas(alunoAtualizado.getQuant_faltas());
+                alunoExistente.setQuantFaltas(alunoAtualizado.getQuant_faltas());
             }
             alunoRepository.save(alunoExistente);
             return alunoExistente;

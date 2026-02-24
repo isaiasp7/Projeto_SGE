@@ -18,7 +18,7 @@ public class RelacionaNotas {
     public RelacionaNotas(Notas nota) {
         this.nota1 = nota.getNota1();
         this.nota2 = nota.getNota2();
-        this.idMat = nota.getMatricula_fk().getId();
-        this.idDisc = nota.getDisciplinaN_fk().getId();
+        this.idMat = nota.getMatriculaFk().getId();
+        this.idDisc = nota.getDisciplinaFk().getId();
     }
 }

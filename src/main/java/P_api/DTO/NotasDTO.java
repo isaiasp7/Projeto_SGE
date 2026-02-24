@@ -25,8 +25,8 @@ public class NotasDTO {
     }
 
     public NotasDTO(Notas nota) {
-        this.disciplina = new DisciplinaDTO(nota.getDisciplinaN_fk());
-        this.matricula = new MatriculaDTO(nota.getMatricula_fk());
+        this.disciplina = new DisciplinaDTO(nota.getDisciplinaFk());
+        this.matricula = new MatriculaDTO(nota.getMatriculaFk());
         this.nota1 = nota.getNota1();
         this.nota2 = nota.getNota2();
         this.media = nota.getMedia();

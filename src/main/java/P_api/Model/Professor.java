@@ -3,6 +3,7 @@ package P_api.Model;
 
 import Util.Utilities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,8 +29,9 @@ public class Professor {
 
     //====================DISCIPLINA=======================
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "disciplina_id", nullable = true)
-    private Disciplina disciplina_fk;
+    @JoinColumn(name = "disciplinaId", nullable = true)
+    @JsonIgnore
+    private Disciplina disciplinaFk;
 
     public Professor() {
 
@@ -37,16 +39,16 @@ public class Professor {
     public Professor(Professor professor) {
         this.setNome(professor.getNome());
         this.email = Utilities.gerar_email(this.getNome());
-        this.disciplina_fk = professor.getDisciplina_fk();
+        this.disciplinaFk = professor.getDisciplinaFk();
         this.id= Utilities.gerar_id("professor");
         this.telefone = professor.getTelefone();
         this.senha = "Professor2026";
     }
 
-    public Professor(String nome, Disciplina disciplina_fk, String telefone) {
+    public Professor(String nome, Disciplina disciplinaFk, String telefone) {
         this.nome = nome;
         this.email = Utilities.gerar_email(this.getNome());
-        this.disciplina_fk = disciplina_fk;
+        this.disciplinaFk = disciplinaFk;
         this.id=(int)Utilities.gerar_id("professor");
         this.telefone = telefone;
         this.senha = "Professor2026";

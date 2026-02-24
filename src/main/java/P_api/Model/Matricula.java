@@ -33,20 +33,20 @@ public class Matricula {
     //=============== ALUNO =================
     //PERSIST = salva  / MERGE = atualizar }
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})   //representa uma relação de um para um. como é o caso de uma matricula para cada aluno
-    @JoinColumn(name = "aluno_cpf")//junção de colunas && uma nova tabela chamada ALUNO_CPF sera gerada possuindo apenas a FK
-    //@JsonIgnore
-    private Aluno aluno_cpf;
+    @JoinColumn(name = "alunoCpf", referencedColumnName = "cpf")
+    private Aluno aluno;
 
     //                 TURMAS
 
     @ManyToOne
-    @JoinColumn(name = "turma_id")//junção de colunas && uma nova tabela chamada turma_id sera gerada possuindo apenas a FK
+    @JoinColumn(name = "turmaId")//junção de colunas && uma nova tabela chamada turma_id sera gerada possuindo apenas
+    // a FK
     private Turma turma;
 
 
     //                 NOTAS
 
-    @OneToMany(mappedBy = "matricula_fk")
+    @OneToMany(mappedBy = "matriculaFk")
 
     private List<Notas> notas = new ArrayList<>();
 
@@ -62,8 +62,8 @@ public class Matricula {
 
         this.dataMatricula = dataMatricula;
         this.id= (int) Utilities.gerar_id("matricula");
-        if(this.getAluno_cpf().getEmail()==null){
-            this.getAluno_cpf().setEmail(Utilities.gerar_email(this.getAluno_cpf().getNome()));
+        if(this.getAluno().getEmail()==null){
+            this.getAluno().setEmail(Utilities.gerar_email(this.getAluno().getNome()));
         }
 
         this.setStatus(status);

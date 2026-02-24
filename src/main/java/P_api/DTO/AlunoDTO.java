@@ -19,7 +19,7 @@ public class AlunoDTO {
 
 
     public AlunoDTO(Aluno aluno) {
-        this.Quant_faltas = aluno.getQuant_faltas();
+        this.Quant_faltas = aluno.getQuantFaltas();
 
 
     }

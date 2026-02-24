@@ -125,7 +125,7 @@ public class DiscService {
                         if (profExistente == null) {
                             continue;
                         }
-                        profExistente.setDisciplina_fk(disc);//garantindo que a tabela prof tera a disciplina
+                        profExistente.setDisciplinaFk(disc);//garantindo que a tabela prof tera a disciplina
                         profRepository.save(profExistente);
                         //profService.updateProf(prof) seria necessario se não tivevesse @OneToOne(cascade = CascadeType.ALL) no relacionamento para  professor receber a disciplina sua tabela tbm
                     }
