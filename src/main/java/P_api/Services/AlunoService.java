@@ -1,8 +1,9 @@
-package P_api.DAO.Services;
+package P_api.Services;
 
 
-import P_api.DAO.ClassRepository.AlunosRepository;
+import P_api.ClassRepository.AlunosRepository;
 import P_api.DTO.AlunoDTO;
+import P_api.Exceptions.Erros.CampoVazio;
 import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Model.Aluno;
 import P_api.Model.Matricula;
@@ -22,7 +23,8 @@ public class AlunoService {
     @Autowired
     private MatricService matricService;//Alguns elementos de aluno estao em matricula = id,turma, notas...
 
-    public List<Aluno> getAlunos() {//se não houver ninguem retora uma lista vazia
+    public List<Aluno> search() {
+
         return alunoRepository.findAll();
     }
 
@@ -49,26 +51,24 @@ public class AlunoService {
 
 
     //=======================================================
-
-
     @Transactional
     public Aluno addAlunos(Aluno aluno) {//REFATORAR
         Aluno newAluno = new Aluno(aluno);
-        /*if (aluno.getNome() == null || aluno.getNome().isBlank()) {
-            throw new IllegalArgumentException("Nome do aluno é obrigatório");
+        if (aluno.getNome() == null || aluno.getNome().isBlank()) {
+            throw new CampoVazio("Nome do aluno é obrigatório");
         }
         if (aluno.getCpf() == null || aluno.getCpf().isBlank()) {
-            throw new IllegalArgumentException("CPF do aluno é obrigatório");
+            throw new CampoVazio("CPF do aluno é obrigatório");
         }
-        if (aluno.getDataNasci() == null) {
-            throw new IllegalArgumentException("Data de nascimento do aluno é obrigatória");
+        if (aluno.getDataNascimento() == null) {
+            throw new CampoVazio("Data de nascimento do aluno é obrigatória");
         }
         if (aluno.getEmail() == null || aluno.getEmail().isBlank()) {
             aluno.setEmail(Utilities.gerar_email(aluno.getNome()));
         }
         if (aluno.getSenha() == null || aluno.getSenha().isBlank()) {
             aluno.setEmail(Utilities.gerar_email(aluno.getNome()));
-        }*/
+        }
         return alunoRepository.save(newAluno);
     }
 

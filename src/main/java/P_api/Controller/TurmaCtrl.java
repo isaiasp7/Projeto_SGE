@@ -1,6 +1,6 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.TurmaService;
+import P_api.Services.TurmaService;
 import P_api.DTO.TurmaDTO;
 import P_api.Model.Turma;
 import org.springframework.beans.factory.annotation.Autowired;

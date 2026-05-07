@@ -2,9 +2,11 @@ package P_api.DAO.Services;
 
 
 
-import P_api.DAO.ClassRepository.DisciplinasRepository;
+import P_api.ClassRepository.DisciplinasRepository;
 import P_api.Model.Disciplina;
 import P_api.Model.Turma;
+import P_api.Services.DiscService;
+import P_api.Services.TurmaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 class DisciplinaServiceTest {
-
+//16
     @Autowired
     private DiscService discService;
 

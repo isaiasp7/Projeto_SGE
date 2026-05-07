@@ -1,8 +1,8 @@
-package P_api.DAO.Services;
+package P_api.Services;
 
-import P_api.DAO.ClassRepository.DisciplinasRepository;
-import P_api.DAO.ClassRepository.ProfessoresRepository;
-import P_api.DAO.ClassRepository.TurmasRepository;
+import P_api.ClassRepository.DisciplinasRepository;
+import P_api.ClassRepository.ProfessoresRepository;
+import P_api.ClassRepository.TurmasRepository;
 import P_api.Model.Disciplina;
 import P_api.Model.Professor;
 import P_api.Model.Turma;

@@ -1,6 +1,7 @@
 package P_api.Model;
 
 
+import P_api.Exceptions.Erros.CampoVazio;
 import Util.Utilities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -49,14 +50,17 @@ public class Aluno {
 
     /*======================================*/
     public Aluno(String cpf, String nome, Date dataNasci) {
-
         this.cpf = cpf;
+
+        // CORREÇÃO: A condição estava invertida
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new CampoVazio("nome vazio");
+        }
+
         this.nome = nome;
         this.dataNascimento = dataNasci;
         this.email = Utilities.gerar_email(this.nome);
         this.senha = "Aluno2026";
-
-
     }
     public Aluno(Aluno aluno) {
 

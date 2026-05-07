@@ -1,15 +1,13 @@
-package P_api.DAO.Services;
+package P_api.Services;
 
-import P_api.DAO.ClassRepository.DisciplinasRepository;
-import P_api.DAO.ClassRepository.ProfessoresRepository;
+import P_api.ClassRepository.DisciplinasRepository;
+import P_api.ClassRepository.ProfessoresRepository;
 import P_api.DTO.ProfDiscDTO;
 import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Exceptions.Erros.FalhaRelacionamento;
 import P_api.Factory.ClassFactory;
 import P_api.Model.Disciplina;
 import P_api.Model.Professor;
-import Util.Utilities;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

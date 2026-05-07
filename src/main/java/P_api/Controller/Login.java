@@ -1,7 +1,7 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.AlunoService;
-import P_api.DAO.Services.ProfService;
+import P_api.Services.AlunoService;
+import P_api.Services.ProfService;
 import P_api.DTO.LoginRequest;
 import P_api.DTO.LoginResponse;
 import P_api.Model.Aluno;

@@ -2,9 +2,13 @@ package P_api.DAO.Services;
 
 import P_api.DTO.AlunoDTO;
 import P_api.DTO.MatriculaDTO;
+import P_api.Exceptions.Erros.CampoVazio;
 import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Model.Aluno;
 import P_api.Model.Turma;
+import P_api.Services.AlunoService;
+import P_api.Services.MatricService;
+import P_api.Services.TurmaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 class AlunoServiceTest {
-
+//17
     @Autowired
     private AlunoService alunoService;
     private Aluno aluno;
@@ -89,7 +93,7 @@ class AlunoServiceTest {
 
             Arrays.stream(esperados).forEach(alunoService::saveAlunos);
 
-            List<Aluno> alunosBanco = alunoService.getAlunos();
+            List<Aluno> alunosBanco = alunoService.search();
 
             assertEquals(4, alunosBanco.size());
 
@@ -134,19 +138,21 @@ class AlunoServiceTest {
 
     @Test
     public void exception_addAluno_semNome() {
-        Aluno semNome = new Aluno(
-                "11122233344",
-                null,
-                Date.from(
-                        LocalDate.of(2000, 1, 1)
-                                .atStartOfDay(ZoneId.systemDefault())
-                                .toInstant()
-                )
+        // Arrange
+        String cpf = "11122233344";
+        Date dataNascimento = Date.from(
+                LocalDate.of(2000, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
         );
 
-        assertThrows(IllegalArgumentException.class,
-                () -> alunoService.addAlunos(semNome)
-        );
+        // Act & Assert
+        CampoVazio exception = assertThrows(CampoVazio.class, () -> {
+            new Aluno(cpf, null, dataNascimento);
+        });
+
+        // Verifica se a mensagem da exceção é a esperada (opcional)
+        assertEquals("nome vazio", exception.getMessage());
     }
 
     @Test
@@ -161,7 +167,7 @@ class AlunoServiceTest {
                 )
         );
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(CampoVazio.class,
                 () -> alunoService.addAlunos(semCpf)
         );
     }
@@ -174,7 +180,7 @@ class AlunoServiceTest {
                 null
         );
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(CampoVazio.class,
                 () -> alunoService.addAlunos(semData)
         );
     }

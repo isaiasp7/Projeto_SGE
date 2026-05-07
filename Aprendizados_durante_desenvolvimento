@@ -40,4 +40,12 @@ Em termos arquiteturais, houve vazamento de estado entre contextos de persistên
 6 - Corrigir => Recursão infinita na serialização(@jsonIgnoe, JsonView, DTO com variações de JsonView para cada request)
                 Professor - Disciplina
 
-7 - Add função de atribuir disciplina a um professor
+7 - Add função de atribuir disciplina a um professor ao front-end
+8 - Simplificar e melhorar requests:
+    front :
+                1 - "Threshold mínimo de caracteres" -> requisição de id
+            2 - Cache no frontend
+            3 -
+    back :
+            1 -
+

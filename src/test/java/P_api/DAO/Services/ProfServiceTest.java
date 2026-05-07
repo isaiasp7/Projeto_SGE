@@ -5,6 +5,8 @@ import P_api.Exceptions.Erros.EntidadeNaoEncontrada;
 import P_api.Exceptions.Erros.FalhaRelacionamento;
 import P_api.Model.Disciplina;
 import P_api.Model.Professor;
+import P_api.Services.DiscService;
+import P_api.Services.ProfService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
-class ProfServiceTest {
+class ProfServiceTest {//12
     @Autowired
     ProfService profService;
     @Autowired
@@ -50,7 +52,6 @@ class ProfServiceTest {
         Professor[] professores = {professor1,professor2,professor3, professo4};
         Arrays.stream(professores).forEach(profService::newProfessor);
         assertEquals(professores.length,profService.getAllProfessores().size());
-        Thread.sleep(20000);
         List<ProfDiscDTO> profBanco = profService.getAllProfessores();
 
         Set<String> telefoneEsperados = Arrays.stream(professores)

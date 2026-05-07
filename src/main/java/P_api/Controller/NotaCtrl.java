@@ -1,6 +1,6 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.NotasService;
+import P_api.Services.NotasService;
 import P_api.DTO.NotasDTO;
 import P_api.DTO.RelacionaNotas;
 import P_api.Model.Matricula;

@@ -1,4 +1,4 @@
-package P_api.DAO.ClassRepository;
+package P_api.ClassRepository;
 
 
 import P_api.Model.Notas;

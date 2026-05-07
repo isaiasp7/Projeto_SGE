@@ -1,6 +1,6 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.DiscService;
+import P_api.Services.DiscService;
 import P_api.DTO.RelacionaDTRequest;
 import P_api.Model.Disciplina;
 import org.springframework.beans.factory.annotation.Autowired;

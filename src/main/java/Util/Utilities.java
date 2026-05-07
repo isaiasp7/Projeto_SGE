@@ -8,7 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Utilities {
         public static String gerar_email(String nome){//DEPOIS FAZER UMA CLASSIFICACAO PARA ALUNO E PROFESSOR
-                String[] lista_name = nome.split(" ");
+            if (nome==null) throw new CampoVazio("Campos nome nulo");
+            String[] lista_name = nome.split(" ");
                 String email = "";
                 try {
                         if (lista_name.length>=2) {
@@ -30,7 +31,7 @@ public class Utilities {
 
 
         }
-        public static long gerar_id(String  tipo){//revisto
+        public static long gerar_id(String  tipo){//Nao e indicado arquiteturalmente -> REFATORAR
                  long id = switch (tipo) {
                      case "notas" -> ThreadLocalRandom.current().nextLong(100000000, 999999999);//length=9
                      case "matricula" ->

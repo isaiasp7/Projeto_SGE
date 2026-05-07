@@ -1,8 +1,8 @@
-package P_api.DAO.Services;
+package P_api.Services;
 
-import P_api.DAO.ClassRepository.DisciplinasRepository;
-import P_api.DAO.ClassRepository.MatriculasRepository;
-import P_api.DAO.ClassRepository.NotasRepository;
+import P_api.ClassRepository.DisciplinasRepository;
+import P_api.ClassRepository.MatriculasRepository;
+import P_api.ClassRepository.NotasRepository;
 import P_api.DTO.NotasDTO;
 import P_api.DTO.RelacionaNotas;
 import P_api.Model.Disciplina;

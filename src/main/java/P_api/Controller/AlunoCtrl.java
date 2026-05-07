@@ -1,6 +1,6 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.AlunoService;
+import P_api.Services.AlunoService;
 import P_api.DTO.AlunoDTO;
 import P_api.Model.Aluno;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("SGE/alunoCrud")
@@ -20,20 +18,24 @@ public class AlunoCtrl {
 
     //============== READ =====================
 
-    @GetMapping
+   /* @GetMapping
     public ResponseEntity<?> search(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String cpf) {
 
-        if (id != null) {
-            return ResponseEntity.ok(alunoS.searchAlunoId(id));
-        }
-
-        if (cpf != null && !cpf.isBlank()) {
-            return ResponseEntity.ok(alunoS.searchAluno(cpf));
-        }
-
-        return ResponseEntity.ok(alunoS.getAlunos());
+        return ResponseEntity.ok(alunoS.search(id, cpf));
+    }*/
+   @GetMapping
+   public ResponseEntity<?> listar() {
+       return ResponseEntity.ok(alunoS.search());
+   }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(alunoS.searchAlunoId(id));
+    }
+    @GetMapping("/cpf")
+    public ResponseEntity<?> buscarPorCpf(@RequestParam String cpf) {
+        return ResponseEntity.ok(alunoS.searchAluno(cpf));
     }
 //============== CREATE =====================
 

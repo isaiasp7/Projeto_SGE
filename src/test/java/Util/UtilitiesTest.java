@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UtilitiesTest {//Teste unitarios
+class UtilitiesTest {//Teste unitarios 6
 
     // ==================== Testes para gerarEmail ====================
 
@@ -50,7 +50,7 @@ class UtilitiesTest {//Teste unitarios
     }
 
     /*
-    AQUI FORÇOU A AMIZADADE - Corrigir
+
     ===================================
     @ParameterizedTest
     @NullAndEmptySource

@@ -1,6 +1,6 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.ProfService;
+import P_api.Services.ProfService;
 import P_api.DTO.ProfDiscDTO;
 import P_api.DTO.RelacionaPDRequest;
 import P_api.Factory.ClassFactory;

@@ -1,6 +1,6 @@
-package P_api.DAO.Services;
+package P_api.Services;
 
-import P_api.DAO.ClassRepository.TurmasRepository;
+import P_api.ClassRepository.TurmasRepository;
 import P_api.DTO.TurmaDTO;
 import P_api.Model.Turma;
 import jakarta.persistence.EntityNotFoundException;

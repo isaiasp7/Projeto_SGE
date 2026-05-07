@@ -1,7 +1,7 @@
 package P_api.Controller;
 
-import P_api.DAO.Services.AlunoService;
-import P_api.DAO.Services.MatricService;
+import P_api.Services.AlunoService;
+import P_api.Services.MatricService;
 import P_api.DTO.MatriculaDTO;
 import P_api.DTO.RelacionaAMRequest;
 import P_api.Model.Matricula;
